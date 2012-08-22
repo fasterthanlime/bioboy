@@ -2,7 +2,7 @@
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor]
 import io/FileReader
 
-import Block
+import Block, Hero
 
 Level: class {
 
@@ -17,6 +17,8 @@ Level: class {
 	ui bgPass addSprite(fog)
 
 	fr := FileReader new("assets/levels/level1.txt")
+
+	heroPos := vec2(0, 0)
 
 	y := 0
 	x := 0
@@ -41,11 +43,13 @@ Level: class {
 		case 'a' =>
 		    createBlock(x, y, "level-end")
 		case 'd' =>
-		    createBlock(x, y, "hero")
+		    heroPos set!(x * Block SIDE, y * Block SIDE)
 	    }
 
 	    x += 1
 	}
+
+	Hero new(engine, heroPos)
     }
 
     createBlock: func (x, y: Int, type: String) {
