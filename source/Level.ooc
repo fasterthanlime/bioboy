@@ -38,6 +38,8 @@ Level: class {
 		    createBlock(x, y, "dblock-d")
 		case '=' =>
 		    createBlock(x, y, "inert")
+		case 'a' =>
+		    createBlock(x, y, "level-end")
 		case 'd' =>
 		    createBlock(x, y, "hero")
 	    }
