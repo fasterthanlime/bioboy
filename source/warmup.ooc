@@ -17,6 +17,8 @@ main: func {
     config := ZombieConfig new(configPath, |base|
 	base("screenWidth", "1024")
 	base("screenHeight", "768")
+	base("fullScreen", "true")
+	base("title", "warmup")
     )
 
     logger info("configuration loaded from %s" format(configPath))
