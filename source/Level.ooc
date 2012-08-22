@@ -1,12 +1,14 @@
 
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor]
 import io/FileReader
+import structs/ArrayList
 
 import Block, Hero
 
 Level: class {
 
     engine: Engine
+    blocks := ArrayList<Block> new()
 
     ui: UI
 
@@ -49,12 +51,13 @@ Level: class {
 	    x += 1
 	}
 
-	Hero new(engine, heroPos)
+	Hero new(engine, this, heroPos)
     }
 
     createBlock: func (x, y: Int, type: String) {
 	block := Block new(type, x, y)
 	ui levelPass addSprite(block sprite)
+	blocks add(block)
     }
 
 }

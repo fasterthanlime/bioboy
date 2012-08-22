@@ -1,5 +1,6 @@
 
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor]
+import Collision
 
 Block: class {
 
@@ -8,11 +9,16 @@ Block: class {
     image: String
     x, y: Int
 
+    box: Box
+
     sprite: ImageSprite
 
     init: func (=image, =x, =y) {
 	path := "assets/png/%s.png" format(image)
-	sprite = ImageSprite new(vec2(x * SIDE, y * SIDE), path)
+
+	pos := vec2(x * SIDE, y * SIDE)
+	sprite = ImageSprite new(pos, path)
+	box = Box new(pos, SIDE, SIDE)
     }
 
 }
