@@ -1,17 +1,13 @@
 
-import game/Engine
+use zombieconfig, ldkit, deadlogger
 
-use zombieconfig, deadlogger
 import zombieconfig
-import deadlogger/[Log, Handler, Formatter, Filter]
+import ldkit/[Engine, Dead]
+import deadlogger/Logger
 
 main: func {
 
-    console := StdoutHandler new()
-    console setFormatter(ColoredFormatter new(NiceFormatter new()))
-    Log root attachHandler(console)
-
-    logger := Log getLogger("main")
+    logger := Dead logger("main")
     logger info("warmup starting up!")
 
     // load config
@@ -23,6 +19,7 @@ main: func {
 
     logger info("configuration loaded from %s" format(configPath))
 
-    Engine new(config)
+    engine := Engine new(config)
+    engine run()
 
 }
