@@ -1,6 +1,5 @@
 
-import ldkit/[Engine, Dead, Math, Sprites, UI, Actor]
-import Collision
+import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Collision]
 
 Block: class {
 

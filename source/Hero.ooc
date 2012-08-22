@@ -1,6 +1,6 @@
 
-import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input]
-import Collision, Level, Block
+import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Collision]
+import Level, Block
 
 Hero: class extends Actor {
 
