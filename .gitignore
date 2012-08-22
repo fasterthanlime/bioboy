@@ -1,0 +1,8 @@
+# Ignore binary file
+warmup
+
+# Ignore .libs files and rock_tmp (output of the compiler)
+.libs
+rock_tmp
+
+libs/*
