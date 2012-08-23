@@ -19,13 +19,14 @@ main: func {
 	base("screenHeight", "768")
 	base("fullScreen", "true")
 	base("title", "warmup")
+	base("levelNum", "1")
     )
 
     logger info("configuration loaded from %s" format(configPath))
 
     engine := Engine new(config)
 
-    level := Level new(engine)
+    level := Level new(engine, config["levelNum"] toInt())
 
     engine run()
 

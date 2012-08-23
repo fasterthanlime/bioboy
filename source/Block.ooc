@@ -24,7 +24,6 @@ Block: class extends Actor {
     sprite: ImageSprite
 
     init: func (=engine, =level, =image, =x, =y) {
-	engine add(this)
 	path := "assets/png/%s.png" format(image)
 
 	pos = vec2(x * SIDE, y * SIDE)
@@ -45,8 +44,6 @@ Block: class extends Actor {
     }
 
     touch: func (bang: Bang) {
-	"Touched! at %s" printfln(sprite pos _)
-
 	match image {
 	    case "dblock-r" =>
 		dir = vec2(1, 0)
@@ -68,7 +65,6 @@ Block: class extends Actor {
 		if (block inert) {
 		    bang := box collide(block box)
 		    if (bang) {
-			"Collide with block %s at %s, depth = %.2f, dir = %s" printfln(block image, block pos _, bang depth, bang dir _)
 			block touch(bang)
 			pos add!(bang dir mul(bang depth))
 			pos set!(pos snap(SIDE))
@@ -79,18 +75,29 @@ Block: class extends Actor {
 
 	    bang := box collide(level hero box)
 	    if (bang) {
-		match true {
-		    case (dir x > 0.1) =>
-			level hero velX = speed
-		    case (dir x < 0.1) =>
-			level hero velX = -speed
-		    case (dir y > 0.1) =>
-			level hero velY = speed
-		    case (dir y < 0.1) =>
-			level hero velY = -speed
-		}
+		applyThrust()
 	    }
 	}
+    }
+
+    applyThrust: func {
+	factor := 1.4
+
+	match true {
+	    case (dir x > 0.1) =>
+		level hero velX = speed * factor
+	    case (dir x < -0.1) =>
+		level hero velX = -speed * factor
+	    case (dir y > 0.1) =>
+		level hero velY = speed * factor
+	    case (dir y < -0.1) =>
+		level hero velY = -speed * factor
+	}
+    }
+
+    destroy: func {
+	engine remove(this)
+	level ui levelPass removeSprite(sprite)
     }
 
 }

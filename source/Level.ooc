@@ -1,11 +1,11 @@
 
-import ldkit/[Engine, Dead, Math, Sprites, UI, Actor]
+import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input]
 import io/FileReader
 import structs/ArrayList
 
 import Block, Hero
 
-Level: class {
+Level: class extends Actor {
 
     engine: Engine
     blocks := ArrayList<Block> new()
@@ -13,13 +13,52 @@ Level: class {
     ui: UI
     hero: Hero
 
-    init: func (=engine) {
+    levelNum: Int
+
+    init: func (=engine, =levelNum) {
 	ui = engine ui
+
+	engine add(this)
 
 	fog := ImageSprite new(vec2(0, 0), "assets/png/fog.png")
 	ui bgPass addSprite(fog)
+    
+	loadLevel()
 
-	fr := FileReader new("assets/levels/level1.txt")
+	ui input onKeyPress(Keys BACKSPACE, ||
+	    loadLevel()
+	)
+    }
+
+    update: func (delta: Float) {
+	for(block in blocks) {
+	    block update(delta)
+	}
+
+	hero update(delta)
+    }
+
+    reset: func {
+	if (hero) {
+	    hero destroy()
+	    hero = null
+	}
+
+	for (block in blocks) {
+	    block destroy()
+	}
+	blocks clear()
+    }
+
+    nextLevel: func {
+	levelNum += 1
+	loadLevel()
+    }
+
+    loadLevel: func {
+	reset()
+
+	fr := FileReader new("assets/levels/level%d.txt" format(levelNum))
 
 	heroPos := vec2(0, 0)
 
@@ -53,6 +92,8 @@ Level: class {
 	}
 
 	hero = Hero new(engine, this, heroPos)
+
+	fr close()
     }
 
     createBlock: func (x, y: Int, type: String) {
