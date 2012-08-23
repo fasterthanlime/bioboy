@@ -49,7 +49,7 @@ Hero: class extends Actor {
 	if (velY > 8) {
 	    velY = 8
 	}
-	velX *= 0.7
+	velX *= 0.8
     }
 
     handleCollisions: func {
@@ -62,18 +62,24 @@ Hero: class extends Actor {
 	for(block in level blocks) {
 	    bang := box collide(block box)
 	    if (bang) {
-		if (bang dir y == 0) {
-		    if (!bestXBang || bang depth < bestXBang depth) {
-			bestXBang = bang
+		if (block solid) {
+		    if (bang dir y == 0) {
+			if (!bestXBang || bang depth < bestXBang depth) {
+			    bestXBang = bang
+			}
+		    } else {
+			if (!bestYBang || bang depth < bestYBang depth) {
+			    bestYBang = bang
+			}
 		    }
-		} else {
-		    if (!bestYBang || bang depth < bestYBang depth) {
-			bestYBang = bang
+
+		    if (bang dir y < 0) {
+			velY = 0
 		    }
 		}
 
-		if (bang dir y < 0) {
-		    velY = 0
+		if (block image == "level-end") {
+		    ui flash("You won!")
 		}
 	    }
 	}

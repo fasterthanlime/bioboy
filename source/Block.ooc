@@ -17,6 +17,7 @@ Block: class extends Actor {
     pos: Vec2
 
     inert := false
+    solid := false
 
     speed := 4.0
 
@@ -37,6 +38,10 @@ Block: class extends Actor {
 	if (image == "inert") {
 	    inert = true
 	}
+
+	if (image != "level-end") {
+	    solid = true
+	}
     }
 
     touch: func (bang: Bang) {
@@ -48,9 +53,9 @@ Block: class extends Actor {
 	    case "dblock-l" =>
 		dir = vec2(-1, 0)
 	    case "dblock-d" =>
-		dir = vec2(0, -1)
-	    case "dblock-u" =>
 		dir = vec2(0, 1)
+	    case "dblock-u" =>
+		dir = vec2(0, -1)
 	}
     }
 
@@ -74,8 +79,16 @@ Block: class extends Actor {
 
 	    bang := box collide(level hero box)
 	    if (bang) {
-		// TODO: all directions
-		level hero velX = speed
+		match true {
+		    case (dir x > 0.1) =>
+			level hero velX = speed
+		    case (dir x < 0.1) =>
+			level hero velX = -speed
+		    case (dir y > 0.1) =>
+			level hero velY = speed
+		    case (dir y < 0.1) =>
+			level hero velY = -speed
+		}
 	    }
 	}
     }
