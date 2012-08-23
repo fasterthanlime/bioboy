@@ -55,6 +55,13 @@ Level: class extends Actor {
 	loadLevel()
     }
 
+    play: func (sound: String) {
+	sample := ui boombox load("assets/ogg/sounds/%s.ogg" format(sound))
+	if (sample) {
+	    ui boombox play(sample)
+	}
+    }
+
     loadLevel: func {
 	reset()
 	

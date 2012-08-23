@@ -33,6 +33,7 @@ main: func (args: ArrayList<String>) {
     engine := Engine new(config)
 
     level := Level new(engine, levelNum)
+    level play("wohow")
 
     engine run()
 

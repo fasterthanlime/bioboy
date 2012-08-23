@@ -69,6 +69,7 @@ Block: class extends Actor {
 			pos add!(bang dir mul(bang depth))
 			pos set!(pos snap(SIDE))
 			dir set!(0, 0)
+			level play("boom")
 		    }
 		}
 	    }

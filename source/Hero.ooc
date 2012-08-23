@@ -1,6 +1,7 @@
 
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Collision]
 import Level, Block, Bullet
+import math/Random, structs/ArrayList
 
 Hero: class extends Actor {
 
@@ -12,6 +13,9 @@ Hero: class extends Actor {
     pos: Vec2
     velX := 0
     velY := 0
+
+    loseSounds := ["you-suck", "woops", "wth-was-that", "aah", "fuck-that", "dont-think-so", "try-again", "too-bad"] as ArrayList<String>
+    winSounds := ["victoly", "yay", "wohow"] as ArrayList<String>
 
     offset := vec2(2, -25)
     collisionOffset := vec2(3, 0)
@@ -83,6 +87,7 @@ Hero: class extends Actor {
 	    counter += 1
 	    if (counter > 16) {
 		ui flash("You died!")
+		level play(Random choice(loseSounds))
 		level loadLevel()
 		break
 	    }
@@ -117,6 +122,7 @@ Hero: class extends Actor {
 
 		    if (block image == "level-end") {
 			ui flash("You won!")
+			level play(Random choice(winSounds))
 			level nextLevel()
 		    }
 		}
