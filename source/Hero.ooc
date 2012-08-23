@@ -34,27 +34,33 @@ Hero: class extends Actor {
 
     setupEvents: func {
 	input = ui input sub()
-	input onKeyPress(Keys SPACE, ||
-	    dir := vec2(0, 0)
-	    if (input isPressed(Keys LEFT)) {
-		dir x = -1
-	    } else if (input isPressed(Keys RIGHT)) {
-		dir x = 1
-	    }
 
-	    if (input isPressed(Keys UP)) {
-		dir y = -1
-	    } else if (input isPressed(Keys DOWN)) {
-		dir y = 1
-	    }
+	input onKeyPress(Keys LEFT, || fire())
+	input onKeyPress(Keys RIGHT, || fire())
+	input onKeyPress(Keys UP, || fire())
+	input onKeyPress(Keys DOWN, || fire())
+    }
 
-	    if (dir squaredNorm() > 0.01) {
-		Bullet new(engine, level,
+    fire: func {
+	dir := vec2(0, 0)
+	if (input isPressed(Keys LEFT)) {
+	dir x = -1
+	} else if (input isPressed(Keys RIGHT)) {
+	dir x = 1
+	}
+
+	if (input isPressed(Keys UP)) {
+	dir y = -1
+	} else if (input isPressed(Keys DOWN)) {
+	dir y = 1
+	}
+
+	if (dir squaredNorm() > 0.01) {
+	    Bullet new(engine, level,
 		    pos add(sprite width / 2,
-		    10 + sprite height / 2),
+			10 + sprite height / 2),
 		    dir normalized())
-	    }
-	)
+	}
     }
 
     update: func (delta: Float) {

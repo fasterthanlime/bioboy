@@ -1,6 +1,6 @@
 
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input]
-import io/FileReader
+import io/[FileReader, File]
 import structs/ArrayList
 
 import Block, Hero
@@ -57,8 +57,17 @@ Level: class extends Actor {
 
     loadLevel: func {
 	reset()
+	
+	path := "assets/levels/level%d.txt" format(levelNum)
 
-	fr := FileReader new("assets/levels/level%d.txt" format(levelNum))
+	f := File new(path)
+	if (!f exists?()) {
+	    levelNum = 1
+	    loadLevel()
+	    return
+	}
+
+	fr := FileReader new(f)
 
 	heroPos := vec2(0, 0)
 
