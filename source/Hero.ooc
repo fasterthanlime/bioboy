@@ -40,8 +40,9 @@ Hero: class extends Actor {
     }
 
     update: func (delta: Float) {
-	if (velY < 8) {
-	    velY += 1
+	velY += 3
+	if (velY > 8) {
+	    velY = 8
 	}
 	pos add!(0, velY)
 

@@ -56,7 +56,7 @@ Level: class {
     }
 
     createBlock: func (x, y: Int, type: String) {
-	block := Block new(type, x, y)
+	block := Block new(engine, this, type, x, y)
 	ui levelPass addSprite(block sprite)
 	blocks add(block)
     }
