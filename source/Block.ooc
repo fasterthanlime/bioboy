@@ -12,6 +12,8 @@ Block: class extends Actor {
     image: String
     x, y: Int
 
+    permanent := false
+
     box: Box
     dir := vec2(0, 0)
     pos: Vec2
@@ -44,6 +46,12 @@ Block: class extends Actor {
     }
 
     touch: func (bang: Bang) {
+	if (!permanent) {
+	    kick()
+	}
+    }
+
+    kick: func {
 	match image {
 	    case "dblock-r" =>
 		dir set!(1, 0)
@@ -70,7 +78,11 @@ Block: class extends Actor {
 			block touch(bang)
 			pos add!(bang dir mul(bang depth))
 			pos set!(pos snap(SIDE))
-			dir set!(0, 0)
+			if (permanent) {
+			    dir set!(dir mul(-1))
+			} else {
+			    dir set!(0, 0)
+			}
 			level play("boom")
 		    }
 		}
@@ -79,6 +91,10 @@ Block: class extends Actor {
 	    bang := box collide(level hero box)
 	    if (bang) {
 		applyThrust()
+	    }
+	} else {
+	    if (permanent) {
+		kick()
 	    }
 	}
     }

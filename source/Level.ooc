@@ -96,6 +96,20 @@ Level: class extends Actor {
 		    createBlock(x, y, "dblock-u")
 		case 'v' =>
 		    createBlock(x, y, "dblock-d")
+
+		case ')' =>
+		    b := createBlock(x, y, "dblock-r")
+		    b permanent = true
+		case '(' =>
+		    b := createBlock(x, y, "dblock-l")
+		    b permanent = true
+		case 'n' =>
+		    b := createBlock(x, y, "dblock-u")
+		    b permanent = true
+		case 'u' =>
+		    b := createBlock(x, y, "dblock-d")
+		    b permanent = true
+
 		case '=' =>
 		    createBlock(x, y, "inert")
 		case 'a' =>
@@ -114,10 +128,11 @@ Level: class extends Actor {
 	fr close()
     }
 
-    createBlock: func (x, y: Int, type: String) {
+    createBlock: func (x, y: Int, type: String) -> Block {
 	block := Block new(engine, this, type, x, y)
 	ui levelPass addSprite(block sprite)
 	blocks add(block)
+	block
     }
 
 }
