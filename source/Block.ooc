@@ -1,6 +1,6 @@
 
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Collision]
-import Level
+import Level, Hero
 
 Block: class extends Actor {
 
@@ -16,6 +16,8 @@ Block: class extends Actor {
     dir := vec2(0, 0)
     pos: Vec2
 
+    inert := false
+
     speed := 4.0
 
     sprite: ImageSprite
@@ -26,7 +28,15 @@ Block: class extends Actor {
 
 	pos = vec2(x * SIDE, y * SIDE)
 	sprite = ImageSprite new(pos, path)
-	box = Box new(pos, SIDE, SIDE)
+	box = Box new(pos, SIDE - 1, SIDE - 1)
+
+	setupAttributes()
+    }
+
+    setupAttributes: func {
+	if (image == "inert") {
+	    inert = true
+	}
     }
 
     touch: func (bang: Bang) {
@@ -45,8 +55,28 @@ Block: class extends Actor {
     }
 
     update: func (delta: Float) {
-	if (dir squaredNorm() > 0) {
+	if (dir squaredNorm() > 0.01) {
 	    pos add!(dir mul(speed))
+
+	    for (block in level blocks) {
+		if (block == this) continue
+		if (block inert) {
+		    bang := box collide(block box)
+		    if (bang) {
+			"Collide with block %s at %s, depth = %.2f, dir = %s" printfln(block image, block pos _, bang depth, bang dir _)
+			block touch(bang)
+			pos add!(bang dir mul(bang depth))
+			pos set!(pos snap(SIDE))
+			dir set!(0, 0)
+		    }
+		}
+	    }
+
+	    bang := box collide(level hero box)
+	    if (bang) {
+		// TODO: all directions
+		level hero velX = speed
+	    }
 	}
     }
 

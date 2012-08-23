@@ -9,6 +9,7 @@ Hero: class extends Actor {
     ui: UI
 
     pos: Vec2
+    velX := 0
     velY := 0
 
     offset := vec2(2, -25)
@@ -40,19 +41,15 @@ Hero: class extends Actor {
     }
 
     update: func (delta: Float) {
+	pos add!(velX, velY)
+
+	handleCollisions()
+
 	velY += 3
 	if (velY > 8) {
 	    velY = 8
 	}
-	pos add!(0, velY)
-
-	if (ui input isPressed(Keys LEFT)) {
-	    pos add!(-4, 0)
-	} else if (ui input isPressed(Keys RIGHT)) {
-	    pos add!(4, 0)
-	}
-
-	handleCollisions()
+	velX *= 0.7
     }
 
     handleCollisions: func {
