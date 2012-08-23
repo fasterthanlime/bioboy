@@ -19,7 +19,7 @@ Block: class extends Actor {
     inert := false
     solid := false
 
-    speed := 4.0
+    speed := 6.0
 
     sprite: ImageSprite
 

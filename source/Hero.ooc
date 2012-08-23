@@ -124,7 +124,6 @@ Hero: class extends Actor {
 
 	    if (bestXBang) {
 		running = true
-		"pos = %s, XBang = %s" printfln(pos _, bestXBang _)
 		pos add!(bestXBang dir mul(bestXBang depth))
 	    }
 	    if (bestYBang) {

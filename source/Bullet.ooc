@@ -10,7 +10,7 @@ Bullet: class extends Actor {
 
     pos: Vec2
     dir: Vec2
-    speed := 12.0
+    speed := 16.0
 
     box: Box
 
