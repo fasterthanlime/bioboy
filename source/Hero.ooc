@@ -1,6 +1,6 @@
 
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Collision]
-import Level, Block
+import Level, Block, Bullet
 
 Hero: class extends Actor {
 
@@ -32,6 +32,11 @@ Hero: class extends Actor {
     }
 
     setupEvents: func {
+	ui input onKeyPress(Keys SPACE, ||
+	    Bullet new(engine, level,
+		pos add(sprite width / 2, offset y + 12 + sprite height / 2),
+		vec2(-1, 0))
+	)
     }
 
     update: func (delta: Float) {

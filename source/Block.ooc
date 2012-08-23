@@ -20,6 +20,10 @@ Block: class {
 	box = Box new(pos, SIDE, SIDE)
     }
 
+    touch: func (bang: Bang) {
+	"Touched! at %s" printfln(sprite pos _)
+    }
+
 }
 
 

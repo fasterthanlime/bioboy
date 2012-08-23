@@ -11,6 +11,7 @@ Level: class {
     blocks := ArrayList<Block> new()
 
     ui: UI
+    hero: Hero
 
     init: func (=engine) {
 	ui = engine ui
@@ -51,7 +52,7 @@ Level: class {
 	    x += 1
 	}
 
-	Hero new(engine, this, heroPos)
+	hero = Hero new(engine, this, heroPos)
     }
 
     createBlock: func (x, y: Int, type: String) {
