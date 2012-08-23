@@ -140,7 +140,6 @@ Hero: class extends Actor {
     }
 
     destroy: func {
-	engine remove(this)
 	ui levelPass removeSprite(sprite)
 	input nuke()
     }

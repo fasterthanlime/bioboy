@@ -53,6 +53,8 @@ Block: class extends Actor {
 		dir set!(0, 1)
 	    case "dblock-u" =>
 		dir set!(0, -1)
+	    case "ice" =>
+		_destroy()
 	}
     }
 
@@ -97,8 +99,12 @@ Block: class extends Actor {
     }
 
     destroy: func {
-	engine remove(this)
 	level ui levelPass removeSprite(sprite)
+    }
+
+    _destroy: func {
+	level blocks remove(this)
+	destroy()
     }
 
 }

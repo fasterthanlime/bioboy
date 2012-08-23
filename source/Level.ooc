@@ -100,6 +100,8 @@ Level: class extends Actor {
 		    createBlock(x, y, "inert")
 		case 'a' =>
 		    createBlock(x, y, "level-end")
+		case '*' =>
+		    createBlock(x, y, "ice")
 		case 'd' =>
 		    heroPos set!(x * Block SIDE, y * Block SIDE)
 	    }
