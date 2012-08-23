@@ -46,13 +46,13 @@ Block: class extends Actor {
     touch: func (bang: Bang) {
 	match image {
 	    case "dblock-r" =>
-		dir = vec2(1, 0)
+		dir set!(1, 0)
 	    case "dblock-l" =>
-		dir = vec2(-1, 0)
+		dir set!(-1, 0)
 	    case "dblock-d" =>
-		dir = vec2(0, 1)
+		dir set!(0, 1)
 	    case "dblock-u" =>
-		dir = vec2(0, -1)
+		dir set!(0, -1)
 	}
     }
 
@@ -62,9 +62,9 @@ Block: class extends Actor {
 
 	    for (block in level blocks) {
 		if (block == this) continue
-		if (block inert) {
-		    bang := box collide(block box)
-		    if (bang) {
+		bang := box collide(block box)
+		if (bang) {
+		    if (block inert || block dir squaredNorm() < 0.1) {
 			block touch(bang)
 			pos add!(bang dir mul(bang depth))
 			pos set!(pos snap(SIDE))

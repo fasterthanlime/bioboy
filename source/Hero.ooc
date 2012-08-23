@@ -14,7 +14,7 @@ Hero: class extends Actor {
     velX := 0
     velY := 0
 
-    loseSounds := ["you-suck", "woops", "wth-was-that", "aah", "fuck-that", "dont-think-so", "try-again", "too-bad"] as ArrayList<String>
+    loseSounds := ["you-suck", "woops", "wth-was-that", "aah", "fuck-that", "dont-think-so", "try-again", "too-bad", "aah", "fuck-that"] as ArrayList<String>
     winSounds := ["victoly", "yay", "wohow"] as ArrayList<String>
 
     offset := vec2(2, -25)
