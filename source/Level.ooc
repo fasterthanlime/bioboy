@@ -28,6 +28,8 @@ Level: class extends Actor {
 	ui input onKeyPress(Keys BACKSPACE, ||
 	    loadLevel()
 	)
+
+	loopMusic("nagisa")
     }
 
     update: func (delta: Float) {
@@ -68,6 +70,13 @@ Level: class extends Actor {
 	sample := ui boombox load("assets/ogg/sounds/%s.ogg" format(sound))
 	if (sample) {
 	    ui boombox play(sample)
+	}
+    }
+
+    loopMusic: func (music: String) {
+	sample := ui boombox load("assets/ogg/music/%s.ogg" format(music))
+	if (sample) {
+	    ui boombox loop(sample)
 	}
     }
 

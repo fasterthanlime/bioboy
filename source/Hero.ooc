@@ -1,5 +1,5 @@
 
-import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Collision]
+import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Collision, Display]
 import Level, Block, Bullet
 import math/Random, structs/ArrayList
 
@@ -77,6 +77,13 @@ Hero: class extends Actor {
 	    velY = 8
 	}
 	velX *= 0.8
+
+	if (pos x < 0 ||
+	    pos y < 0 ||
+	    pos x > ui display width ||
+	    pos y > ui display height) {
+	    die()
+	}
     }
 
     handleCollisions: func {
@@ -86,9 +93,7 @@ Hero: class extends Actor {
 	while (running) {
 	    counter += 1
 	    if (counter > 16) {
-		ui flash("You died!")
-		level play(Random choice(loseSounds))
-		level loadLevel()
+		die()
 		break
 	    }
 
@@ -137,6 +142,12 @@ Hero: class extends Actor {
 		pos add!(bestYBang dir mul(bestYBang depth))
 	    }
 	}
+    }
+
+    die: func {
+	ui flash("You died!")
+	level play(Random choice(loseSounds))
+	level loadLevel()
     }
 
     destroy: func {
