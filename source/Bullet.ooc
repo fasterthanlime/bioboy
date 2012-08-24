@@ -26,7 +26,7 @@ Bullet: class extends Actor {
 	
 	box = Box new(vec2(0, 0), sprite width, sprite height)
 
-	level play("fire")
+	level play("plop")
     }
 
     update: func (delta: Float) {
@@ -37,16 +37,20 @@ Bullet: class extends Actor {
 	    bang := box collide(block box)
 	    if (bang) {
 		block touch(bang)
-		level play("boom")
-		destroy()
+		level play("fire")
+		_destroy()
 		break
 	    }
 	}
     }
 
     destroy: func {
-	engine remove(this)
 	ui levelPass removeSprite(sprite)
+    }
+
+    _destroy: func {
+	destroy()
+	engine remove(this)
     }
 
 }

@@ -48,6 +48,15 @@ Level: class extends Actor {
 	    block destroy()
 	}
 	blocks clear()
+
+	iter := engine actors iterator()
+	while (iter hasNext?()) {
+	    actor := iter next()
+	    if (actor == this) continue
+
+	    actor destroy()
+	    iter remove()
+	}
     }
 
     nextLevel: func {
