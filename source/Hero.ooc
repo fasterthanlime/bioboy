@@ -60,10 +60,12 @@ Hero: class extends Actor {
 	}
 
 	if (dir squaredNorm() > 0.01) {
+	    dir = dir normalized()
+
 	    Bullet new(engine, level,
 		    pos add(sprite width / 2,
 			10 + sprite height / 2),
-		    dir normalized())
+		    dir)
 	}
     }
 
@@ -73,10 +75,10 @@ Hero: class extends Actor {
 	handleCollisions()
 
 	velY += 3
-	if (velY > 8) {
-	    velY = 8
+	if (velY > 12) {
+	    velY = 12
 	}
-	velX *= 0.8
+	velX *= 0.9
 
 	if (pos x < 0 ||
 	    pos y < 0 ||

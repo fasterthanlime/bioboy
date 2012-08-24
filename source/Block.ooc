@@ -100,7 +100,7 @@ Block: class extends Actor {
     }
 
     applyThrust: func {
-	factor := 1.4
+	factor := 1.2
 
 	match true {
 	    case (dir x > 0.1) =>
