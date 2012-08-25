@@ -6,7 +6,7 @@ import ldkit/[Engine, Dead, Math, Sprites, UI]
 import deadlogger/Logger
 import structs/ArrayList
 
-import Level
+import Level, Story, Menu
 
 main: func (args: ArrayList<String>) {
 
