@@ -23,10 +23,11 @@ LevelSelect: class extends Actor {
     side := 60
     padding := 25
 
-    paddingLeft := 200
+    paddingLeft := 300
     paddingTop := 100
 
     selector: RectSprite
+    nameLabel: LabelSprite
 
     onPlay: Func (String)
 
@@ -38,6 +39,8 @@ LevelSelect: class extends Actor {
 	ui statusPass addPass(pass)
 
 	setupEvents()
+
+	buildGrid()
 
 	clear()
     }
@@ -83,14 +86,14 @@ LevelSelect: class extends Actor {
 	if (row >= height) row = 0
 
 	selector pos set!(toScreen(col, row))
+	nameLabel setText("Level %d-%d" format(row, col))
     }
 
     enter: func {
 	pass enabled = true
 	input enabled = true
 	engine add(this)
-
-	buildGrid()
+	updateSelector(0, 0)
     }
 
     clear: func {
@@ -119,17 +122,24 @@ LevelSelect: class extends Actor {
 	    pass addSprite(rect)
 	}
 
-	if (!selector) {
-	    selector = RectSprite new(toScreen(0, 0))
-	    selector size set!(side + 5, side + 5)
-	    selector filled = false
-	    selector thickness = 4
-	    selector color set!(1.0, 1.0, 1.0)
-	}
+	selector = RectSprite new(toScreen(0, 0))
+	selector size set!(side + 5, side + 5)
+	selector filled = false
+	selector thickness = 4
+	selector color set!(1.0, 1.0, 1.0)
 	pass addSprite(selector)
+
+	nameLabel = LabelSprite new(vec2(50, paddingTop), "<Level name>")
+	nameLabel color set!(1.0, 1.0, 1.0)
+	pass addSprite(nameLabel)
     }
 
     update: func (delta: Float) {
+
+    }
+
+    destroy: func {
+
     }
 
 }
