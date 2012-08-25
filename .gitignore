@@ -6,4 +6,5 @@ warmup
 rock_tmp
 
 libs/*
+build/*
 *~
