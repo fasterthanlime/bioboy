@@ -19,7 +19,7 @@ file: level2.txt
 
 ## No sweat
 
-file: level7.txt
+file: level6.txt
 
 # Spike land
 

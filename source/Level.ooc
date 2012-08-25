@@ -3,7 +3,7 @@ import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
 import io/[FileReader, File]
 import structs/ArrayList
 
-import Block, Hero
+import Block, Hero, TimeHelper
 
 Level: class extends Actor {
 
@@ -16,14 +16,20 @@ Level: class extends Actor {
     levelFile: String
     onDone: Func (Bool)
 
-    pass, bgPass, objectPass: Pass
+    pass, bgPass, objectPass, hudPass: Pass
+
+    lifeLabel: LabelSprite
+    timeLabel: LabelSprite
+
+    life := 0.0
+    millis: Long = 0
 
     init: func (=engine, =onDone) {
 	ui = engine ui
 
 	initPasses()
 	initBg()
-	
+	initHud()
     
 	ui input onKeyPress(Keys BACKSPACE, ||
 	    loadLevel()
@@ -40,6 +46,9 @@ Level: class extends Actor {
 
 	objectPass = Pass new(ui, "level-objects")
 	pass addPass(objectPass)
+
+	hudPass = Pass new(ui, "level-hud")
+	pass addPass(hudPass)
     }
 
     initBg: func {
@@ -47,7 +56,27 @@ Level: class extends Actor {
 	bgPass addSprite(fog)
     }
 
+    initHud: func {
+	timeLabel = LabelSprite new(vec2(20, 50), "")
+	timeLabel fontSize = 40.0
+	timeLabel color set!(1.0, 1.0, 1.0)
+	hudPass addSprite(timeLabel)
+
+	lifeLabel = LabelSprite new(vec2(900, 50), "")
+	lifeLabel fontSize = 40.0
+	lifeLabel color set!(1.0, 1.0, 1.0)
+	hudPass addSprite(lifeLabel)
+    }
+
+    updateHud: func {
+	lifeLabel setText("%.0f%%" format(life))
+	timeLabel setText(TimeHelper format(millis))
+    }
+
     update: func (delta: Float) {
+	millis += delta as Long
+	updateHud()
+
 	for(block in blocks) {
 	    block update(delta)
 	}
@@ -104,6 +133,9 @@ Level: class extends Actor {
 
     loadLevel: func -> Bool {
 	clear()
+
+	millis = 0
+	life = 100.0
 
 	path := "assets/levels/%s" format(levelFile)
 

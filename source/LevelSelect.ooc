@@ -126,7 +126,11 @@ LevelSelect: class extends Actor {
 	if (colNum < 0) colNum = 0
 
 	maxCols := row items size
-	if (colNum >= maxCols) colNum = maxCols - 1
+	if (colNum >= maxCols) {
+	    colNum = 0
+	    updateSelector(0, 1)
+	    return
+	}
 
 	item = row items get(colNum)
 
