@@ -11,16 +11,26 @@ file: level3.txt
 
 # Icy kingdom
 
+## Woopsy doo
 
+file: level2.txt
 
 # Booma park
 
+## No sweat
 
+file: level7.txt
 
 # Spike land
 
+## Friendly.. not?
 
+file: level5.txt
 
 # Black valley
+
+## Hell on earth
+
+file: level4.txt
 
 

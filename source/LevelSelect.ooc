@@ -113,10 +113,18 @@ LevelSelect: class extends Actor {
     }
 
     updateSelector: func (deltaCol, deltaRow: Int) {
-	colNum += deltaCol
 	rowNum += deltaRow
+	if (rowNum < 0) rowNum = plan rows size - 1
+	if (rowNum >= plan rows size) rowNum = 0
 
 	row = plan rows get(rowNum)
+
+	colNum += deltaCol
+	if (colNum < 0) colNum = 0
+
+	maxCols := row items size
+	if (colNum >= maxCols) colNum = maxCols - 1
+
 	item = row items get(colNum)
 
 	selector pos set!(toScreen(colNum, rowNum))
