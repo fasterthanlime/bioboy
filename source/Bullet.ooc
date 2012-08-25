@@ -45,7 +45,7 @@ Bullet: class extends Actor {
 		recoil := 16.0
 
 		if (dist < radius) {
-		    factor := - dist * recoil / radius
+		    factor := - (1.0 - dist / radius) * recoil
 		    level hero velX += factor * dir x
 		    level hero velY += factor * dir y
 		}

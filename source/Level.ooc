@@ -29,7 +29,7 @@ Level: class extends Actor {
 	    loadLevel()
 	)
 
-	loopMusic("nagisa")
+	loopMusic("yourdad")
     }
 
     update: func (delta: Float) {
