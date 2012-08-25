@@ -41,8 +41,8 @@ Game: class {
 	    levelSelect enter()
 	)
 
-	levelSelect = LevelSelect new(engine, |levelName|
-	    if(level jumpTo(levelName)) {
+	levelSelect = LevelSelect new(engine, |levelFile|
+	    if(level jumpTo(levelFile)) {
 		levelSelect clear()
 	    }
 	)

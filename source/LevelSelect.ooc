@@ -5,6 +5,58 @@ import structs/ArrayList
 
 import Block, Hero
 
+Item: class {
+
+    name: String
+    file: String
+
+    init: func (=name) {
+    }
+
+}
+
+Row: class {
+
+    items := ArrayList<Item> new()
+
+    name: String
+
+    init: func (=name) {}
+
+}
+
+Plan: class {
+    rows := ArrayList<Row> new()
+
+    init: func (name: String) {
+	fr := FileReader new("assets/levels/%s.txt" format(name))
+
+	row: Row = null
+	item: Item = null	
+
+	while (fr hasNext?()) {
+	    line := fr readLine()
+
+	    if (line startsWith?("# ")) {
+		row = Row new(line substring(2))
+		rows add(row)
+	    }
+
+	    if (line startsWith?("## ")) {
+		item = Item new(line substring(3))
+		row items add(item)
+	    }
+
+	    if (line startsWith?("file: ")) {
+		item file = line substring(6)
+	    }
+	}
+
+	fr close()
+    }
+
+}
+
 LevelSelect: class extends Actor {
 
     engine: Engine
@@ -14,11 +66,12 @@ LevelSelect: class extends Actor {
     pass: Pass
     selector: ImageSprite
 
-    col := 0
-    row := 0
+    colNum := 0
+    rowNum := 0
 
-    width := 8
-    height := 7
+    plan: Plan
+    row: Row
+    item: Item
 
     side := 60
     padding := 25
@@ -27,6 +80,7 @@ LevelSelect: class extends Actor {
     paddingTop := 100
 
     selector: RectSprite
+    rowLabel: LabelSprite
     nameLabel: LabelSprite
 
     onPlay: Func (String)
@@ -54,39 +108,20 @@ LevelSelect: class extends Actor {
 	input onKeyPress(Keys ENTER, || takeAction())
     }
 
-    levelName: func (col, row: Int) -> String {
-	"%d-%d" format(row, col)
-    }
-
     takeAction: func {
-	onPlay(levelName(col, row))
+	onPlay(item file)
     }
 
     updateSelector: func (deltaCol, deltaRow: Int) {
-	col += deltaCol
-	if (col < 0) {
-	    col = width - 1
-	    if (row > 0) {
-		row -= 1
-	    } else {
-		row = height - 1
-	    }
-	}
-	if (col >= width) {
-	    col = 0
-	    if (row <= height) {
-		row += 1
-	    } else {
-		row = 0
-	    }
-	}
+	colNum += deltaCol
+	rowNum += deltaRow
 
-	row += deltaRow
-	if (row < 0) row = height - 1
-	if (row >= height) row = 0
+	row = plan rows get(rowNum)
+	item = row items get(colNum)
 
-	selector pos set!(toScreen(col, row))
-	nameLabel setText("Level %d-%d" format(row, col))
+	selector pos set!(toScreen(colNum, rowNum))
+	rowLabel setText("%s" format(row name))
+	nameLabel setText("%s" format(item name))
     }
 
     enter: func {
@@ -109,17 +144,24 @@ LevelSelect: class extends Actor {
     }
 
     buildGrid: func {
-	for (j in 0..height) for (i in 0..width) {
-	    rect := RectSprite new(toScreen(i, j))
-	    if (i == width - 1) {
-		rect color set!(1.0, 1.0, 0.0)
-	    } else {
-		rect color set!(1.0, 1.0, 1.0)
+	plan = Plan new("plan")
+
+	for (j in 0..plan rows size) {
+	    row = plan rows get(j)
+	    for (i in 0..row items size) {
+		item = row items get(i)
+
+		rect := RectSprite new(toScreen(i, j))
+		if (i == row items size - 1) {
+		    rect color set!(1.0, 1.0, 0.0)
+		} else {
+		    rect color set!(1.0, 1.0, 1.0)
+		}
+		rect filled = false
+		rect thickness = 1
+		rect size set!(side, side)
+		pass addSprite(rect)
 	    }
-	    rect filled = false
-	    rect thickness = 1
-	    rect size set!(side, side)
-	    pass addSprite(rect)
 	}
 
 	selector = RectSprite new(toScreen(0, 0))
@@ -129,7 +171,11 @@ LevelSelect: class extends Actor {
 	selector color set!(1.0, 1.0, 1.0)
 	pass addSprite(selector)
 
-	nameLabel = LabelSprite new(vec2(50, paddingTop), "<Level name>")
+	rowLabel = LabelSprite new(vec2(50, paddingTop), "<World name>")
+	rowLabel color set!(1.0, 1.0, 0.4)
+	pass addSprite(rowLabel)
+
+	nameLabel = LabelSprite new(vec2(50, 30 + paddingTop), "<Level name>")
 	nameLabel color set!(1.0, 1.0, 1.0)
 	pass addSprite(nameLabel)
     }

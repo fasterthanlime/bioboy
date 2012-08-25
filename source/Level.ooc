@@ -13,7 +13,7 @@ Level: class extends Actor {
     ui: UI
     hero: Hero
 
-    levelName: String
+    levelFile: String
     onDone: Func (Bool)
 
     pass, bgPass, objectPass: Pass
@@ -98,14 +98,14 @@ Level: class extends Actor {
 	}
     }
 
-    jumpTo: func (=levelName) -> Bool {
+    jumpTo: func (=levelFile) -> Bool {
 	loadLevel()
     }
 
     loadLevel: func -> Bool {
 	clear()
 
-	path := "assets/levels/level%s.txt" format(levelName)
+	path := "assets/levels/%s" format(levelFile)
 
 	f := File new(path)
 	if (!f exists?()) {
