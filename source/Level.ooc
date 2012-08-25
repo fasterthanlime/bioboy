@@ -257,11 +257,11 @@ Story: class extends Actor {
 
 	// image
         card := cards get(cardNum)
-	bg := ImageSprite new(vec2(0, 0), "assets/png/%s.png" format(card image))
+	bg := ImageSprite new(vec2(0, 0), "assets/png/story/%s.png" format(card image))
 	pass addSprite(bg)
 
 	// lines
-	pos := vec2(200, 600)
+	pos := vec2(200, 650)
 	for (line in card lines) {
 	    sprite := LabelSprite new(pos, line)
 	    sprite color set!(0.8, 0.8, 0.8)
