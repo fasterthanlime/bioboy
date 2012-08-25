@@ -82,6 +82,9 @@ LevelSelect: class extends Actor {
     selector: RectSprite
     rowLabel: LabelSprite
     nameLabel: LabelSprite
+    pointsLabel: LabelSprite
+
+    points := 0
 
     onPlay: Func (String)
 
@@ -186,6 +189,10 @@ LevelSelect: class extends Actor {
 	nameLabel = LabelSprite new(vec2(50, 30 + paddingTop), "<Level name>")
 	nameLabel color set!(1.0, 1.0, 1.0)
 	pass addSprite(nameLabel)
+
+	pointsLabel = LabelSprite new(vec2(50, 700), "%d" format(points))
+	pointsLabel color set!(1.0, 1.0, 1.0)
+	pass addSprite(pointsLabel)
     }
 
     update: func (delta: Float) {
