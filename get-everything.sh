@@ -1,6 +1,8 @@
 #!/bin/bash
 
 DIR=$(dirname $(readlink -f $0)) # Directory script is in
+
+mkdir -p $DIR/libs/
 cd $DIR/libs/
 
 function fail() {
