@@ -1,5 +1,5 @@
 
-import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input]
+import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
 import io/[FileReader, File]
 import structs/ArrayList
 
@@ -18,18 +18,14 @@ Level: class extends Actor {
     init: func (=engine, =levelNum) {
 	ui = engine ui
 
-	engine add(this)
-
 	fog := ImageSprite new(vec2(0, 0), "assets/png/fog.png")
-	ui bgPass addSprite(fog)
+	//ui bgPass addSprite(fog)
     
-	loadLevel()
-
 	ui input onKeyPress(Keys BACKSPACE, ||
 	    loadLevel()
 	)
 
-	loopMusic("yourdad")
+	//loopMusic("yourdad")
     }
 
     update: func (delta: Float) {
@@ -40,7 +36,9 @@ Level: class extends Actor {
 	hero update(delta)
     }
 
-    reset: func {
+    clear: func {
+	engine remove(this)
+
 	if (hero) {
 	    hero destroy()
 	    hero = null
@@ -81,8 +79,10 @@ Level: class extends Actor {
     }
 
     loadLevel: func {
-	reset()
+	clear()
 	
+	engine add(this)
+
 	path := "assets/levels/level%d.txt" format(levelNum)
 
 	f := File new(path)
@@ -154,3 +154,95 @@ Level: class extends Actor {
     }
 
 }
+
+
+StoryCard: class {
+    image: String
+    lines := ArrayList<String> new()
+
+    init: func (=image) {}
+}
+
+
+Story: class extends Actor {
+
+    engine: Engine
+
+    ui: UI
+    input: Input
+    pass: Pass
+
+    cards := ArrayList<StoryCard> new()
+    cardNum := 0
+
+    init: func (=engine) {
+	ui = engine ui
+	input = ui input sub()
+    
+	loadStory()
+	pass = Pass new(ui, "story")
+	ui statusPass addPass(pass)
+
+	input onKeyPress(Keys SPACE, ||
+	    nextCard()
+	)
+    }
+
+    loadStory: func () {
+	fr := FileReader new("assets/story/story.txt")
+
+	while (fr hasNext?()) {
+	    card := StoryCard new(fr readLine())
+	    cards add(card)
+
+	    fr readLine() // skip blank line after image path
+
+	    while (fr hasNext?()) {
+		line := fr readLine()
+
+		if (line empty?()) {
+		    break
+		}
+
+		card lines add(line)
+	    }
+	}
+    }
+
+    clear: func {
+	pass reset()
+	pass enabled = false
+	input enabled = false
+    }
+
+    nextCard: func {
+	cardNum += 1
+	loadCard()
+    }
+
+    loadCard: func {
+	clear()
+
+	pass enabled = true
+	input enabled = true
+
+	// image
+        card := cards get(cardNum)
+	bg := ImageSprite new(vec2(0, 0), "assets/png/%s.png" format(card image))
+	pass addSprite(bg)
+
+	// lines
+	pos := vec2(200, 600)
+	for (line in card lines) {
+	    sprite := LabelSprite new(pos, line)
+	    sprite color set!(0.8, 0.8, 0.8)
+	    sprite fontSize = 30.0
+	    pass addSprite(sprite)
+
+	    pos = pos add(0, 30)
+	}
+    }
+
+}
+
+

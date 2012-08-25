@@ -33,7 +33,10 @@ main: func (args: ArrayList<String>) {
     engine := Engine new(config)
 
     level := Level new(engine, levelNum)
-    level play("wohow")
+    //level play("wohow")
+
+    story := Story new(engine)
+    story loadCard()
 
     engine run()
 
