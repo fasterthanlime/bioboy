@@ -13,11 +13,12 @@ Level: class extends Actor {
     ui: UI
     hero: Hero
 
-    levelNum: Int
+    levelName: String
+    onDone: Func (Bool)
 
     pass, bgPass, objectPass: Pass
 
-    init: func (=engine, =levelNum) {
+    init: func (=engine, =onDone) {
 	ui = engine ui
 
 	initPasses()
@@ -79,8 +80,8 @@ Level: class extends Actor {
     }
 
     nextLevel: func {
-	levelNum += 1
-	loadLevel()
+	clear()
+	onDone(true)
     }
 
     play: func (sound: String) {
@@ -97,19 +98,20 @@ Level: class extends Actor {
 	}
     }
 
-    loadLevel: func {
-	clear()
-	
-	engine add(this)
-	pass enabled = true
+    jumpTo: func (=levelName) -> Bool {
+	loadLevel()
+    }
 
-	path := "assets/levels/level%d.txt" format(levelNum)
+    loadLevel: func -> Bool {
+	clear()
+
+	path := "assets/levels/level%s.txt" format(levelName)
 
 	f := File new(path)
 	if (!f exists?()) {
-	    levelNum = 1
-	    loadLevel()
-	    return
+	    play("uh-oh")
+	    ui flash("Level %s does not exist!" format(path))
+	    return false
 	}
 
 	fr := FileReader new(f)
@@ -164,11 +166,15 @@ Level: class extends Actor {
 	hero = Hero new(engine, this, heroPos)
 
 	fr close()
+	
+	engine add(this)
+	pass enabled = true
+	
+	return true
     }
 
     createBlock: func (x, y: Int, type: String) -> Block {
 	block := Block new(engine, this, type, x, y)
-	ui levelPass addSprite(block sprite)
 	blocks add(block)
 	block
     }

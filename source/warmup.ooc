@@ -6,43 +6,59 @@ import ldkit/[Engine, Dead, Math, Sprites, UI]
 import deadlogger/Logger
 import structs/ArrayList
 
-import Level, Story, Menu
+import Level, Story, Menu, LevelSelect
 
 main: func (args: ArrayList<String>) {
+    Game new()
+}
 
-    logger := Dead logger("main")
-    logger info("warmup starting up!")
+Game: class {
 
-    // load config
-    configPath := "config/warmup.config"
-    config := ZombieConfig new(configPath, |base|
-	base("screenWidth", "1024")
-	base("screenHeight", "768")
-	base("fullScreen", "true")
-	base("title", "warmup")
-    )
+    levelSelect: LevelSelect
+    level: Level
+    story: Story
+    menu: Menu
 
-    levelNum := 1
+    init: func {
 
-    if (args size > 1) {
-	levelNum = args[1] toInt()
+	logger := Dead logger("main")
+	logger info("bioboy starting up!")
+
+	// load config
+	configPath := "config/bioboy.config"
+	config := ZombieConfig new(configPath, |base|
+	    base("screenWidth", "1024")
+	    base("screenHeight", "768")
+	    base("fullScreen", "true")
+	    base("title", "bioboy")
+	)
+	logger info("configuration loaded from %s" format(configPath))
+
+	engine := Engine new(config)
+
+	level = Level new(engine, |success|
+	    levelSelect	updateSelector(success ? 1 : 0, 0)
+	    levelSelect enter()
+	)
+
+	levelSelect = LevelSelect new(engine, |levelName|
+	    if(level jumpTo(levelName)) {
+		levelSelect clear()
+	    }
+	)
+
+	menu = Menu new(engine, ||
+	    levelSelect enter()
+	)
+
+	story = Story new(engine, "intro", ||
+	    menu enter()
+	)
+	story loadCard()
+
+	engine run()
+
     }
 
-    logger info("configuration loaded from %s" format(configPath))
-
-    engine := Engine new(config)
-
-    level := Level new(engine, levelNum)
-
-    menu := Menu new(engine, ||
-	level loadLevel()
-    )
-
-    story := Story new(engine, "intro", ||
-	menu enter()
-    )
-    story loadCard()
-
-    engine run()
-
 }
+

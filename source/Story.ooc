@@ -38,6 +38,14 @@ Story: class extends Actor {
 	input onKeyPress(Keys SPACE, ||
 	    nextCard()
 	)
+
+	input onKeyPress(Keys ENTER, ||
+	    leave()
+	)
+
+	input onKeyPress(Keys ESC, ||
+	    leave()
+	)
     }
 
     loadStory: func () {
@@ -71,11 +79,15 @@ Story: class extends Actor {
 	cardNum += 1
 
 	if (cards size <= cardNum) {
-	    clear()
-	    onDone()
+	    leave()
 	} else {
 	    loadCard()
 	}
+    }
+
+    leave: func {
+	clear()
+	onDone()
     }
 
     loadCard: func {

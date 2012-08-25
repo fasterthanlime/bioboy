@@ -73,11 +73,11 @@ Menu: class extends Actor {
 	currentPos += delta
 
 	if (currentPos < 0){
-	    currentPos = 0
+	    currentPos = positions size - 1
 	}
 
 	if (currentPos >= positions size) {
-	    currentPos = positions size - 1
+	    currentPos = 0
 	}
 
 	selector pos = positions[currentPos]
