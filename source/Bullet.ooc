@@ -22,7 +22,7 @@ Bullet: class extends Actor {
 
 	sprite = ImageSprite new(pos, "assets/png/bullet.png")
 	sprite offset set!(-6, -6)
-	ui levelPass addSprite(sprite)
+	level objectPass addSprite(sprite)
 	
 	box = Box new(vec2(0, 0), sprite width, sprite height)
 
@@ -56,7 +56,7 @@ Bullet: class extends Actor {
     }
 
     destroy: func {
-	ui levelPass removeSprite(sprite)
+	level objectPass removeSprite(sprite)
     }
 
     _destroy: func {

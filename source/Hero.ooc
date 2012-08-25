@@ -31,7 +31,7 @@ Hero: class extends Actor {
 
 	box = Box new(vec2(0, 0), 26, sprite height)
 
-	ui levelPass addSprite(sprite)
+	level objectPass addSprite(sprite)
 
 	setupEvents()
     }
@@ -153,7 +153,7 @@ Hero: class extends Actor {
     }
 
     destroy: func {
-	ui levelPass removeSprite(sprite)
+	level objectPass removeSprite(sprite)
 	input nuke()
     }
 
