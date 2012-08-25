@@ -15,17 +15,35 @@ Level: class extends Actor {
 
     levelNum: Int
 
+    pass, bgPass, objectPass: Pass
+
     init: func (=engine, =levelNum) {
 	ui = engine ui
 
-	fog := ImageSprite new(vec2(0, 0), "assets/png/fog.png")
-	//ui bgPass addSprite(fog)
+	initPasses()
+	initBg()
+	
     
 	ui input onKeyPress(Keys BACKSPACE, ||
 	    loadLevel()
 	)
+    }
 
-	//loopMusic("yourdad")
+    initPasses: func {
+	pass = Pass new(ui, "level")
+	pass enabled = false
+	ui levelPass addPass(pass)
+
+	bgPass = Pass new(ui, "level-background")
+	pass addPass(bgPass)
+
+	objectPass = Pass new(ui, "level-objects")
+	pass addPass(objectPass)
+    }
+
+    initBg: func {
+	fog := ImageSprite new(vec2(0, 0), "assets/png/fog.png")
+	bgPass addSprite(fog)
     }
 
     update: func (delta: Float) {
@@ -37,6 +55,7 @@ Level: class extends Actor {
     }
 
     clear: func {
+	pass enabled = false
 	engine remove(this)
 
 	if (hero) {
@@ -82,6 +101,7 @@ Level: class extends Actor {
 	clear()
 	
 	engine add(this)
+	pass enabled = true
 
 	path := "assets/levels/level%d.txt" format(levelNum)
 
@@ -172,10 +192,13 @@ Story: class extends Actor {
     input: Input
     pass: Pass
 
+    name: String
     cards := ArrayList<StoryCard> new()
     cardNum := 0
 
-    init: func (=engine) {
+    onDone: Func
+
+    init: func (=engine, =name, =onDone) {
 	ui = engine ui
 	input = ui input sub()
     
@@ -189,7 +212,7 @@ Story: class extends Actor {
     }
 
     loadStory: func () {
-	fr := FileReader new("assets/story/story.txt")
+	fr := FileReader new("assets/story/%s.txt" format(name))
 
 	while (fr hasNext?()) {
 	    card := StoryCard new(fr readLine())
@@ -217,7 +240,13 @@ Story: class extends Actor {
 
     nextCard: func {
 	cardNum += 1
-	loadCard()
+
+	if (cards size <= cardNum) {
+	    clear()
+	    onDone()
+	} else {
+	    loadCard()
+	}
     }
 
     loadCard: func {
