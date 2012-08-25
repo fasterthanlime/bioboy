@@ -34,9 +34,12 @@ main: func (args: ArrayList<String>) {
 
     level := Level new(engine, levelNum)
 
-    story := Story new(engine, "intro", ||
-	"Story finished!" println()
+    menu := Menu new(engine, ||
 	level loadLevel()
+    )
+
+    story := Story new(engine, "intro", ||
+	menu enter()
     )
     story loadCard()
 
