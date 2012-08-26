@@ -2,6 +2,50 @@
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Collision, Pass, Colors]
 import Level, Block, Hero, Power
 
+Explosion: class extends Actor {
+
+    engine: Engine
+    pass: Pass
+
+    sprite: ImageSprite
+
+    counter := 0
+    maxCounter := 15
+
+    init: func (=engine, =pass, pos: Vec2, image: String) {
+	sprite = ImageSprite new(pos, "assets/png/%s.png" format(image))
+	sprite center!()
+
+	engine add(this)
+	pass addSprite(sprite)
+	update(0)
+    }
+
+    update: func (delta: Float) {
+	counter += 1
+
+	sprite alpha = 0.3 + ((maxCounter - counter) / (1.0 * maxCounter) * 0.7)
+
+	scale := 0.3 + (counter) / (1.0 * maxCounter) * 0.7
+	sprite scale set!(scale, scale)
+	sprite center!()
+
+	if (counter >= maxCounter) {
+	    destroy()
+	}
+    }
+
+    destroy: func {
+	pass removeSprite(sprite)
+    }
+
+    _destroy: func {
+	destroy()
+	engine remove(this)
+    }
+
+}
+
 DamageLabel: class extends Actor {
 
     engine: Engine
@@ -91,6 +135,7 @@ Bullet: class extends Actor {
 
 		if (type == BulletType BULLET) {
 		    level play("fire")
+		    Explosion new(engine, level objectPass, pos, "boom")
 
 		    diff := level hero pos sub(level hero offset) sub(pos)
 		    diff x *= 1.2
@@ -119,6 +164,7 @@ Bullet: class extends Actor {
 		    }
 		} else {
 		    level play("plop")
+		    Explosion new(engine, level objectPass, pos, "plop")
 		}
 
 		_destroy()
