@@ -96,6 +96,7 @@ LevelSelect: class extends Actor {
 
     side := 60
     padding := 25
+    verticalPadding := 45
 
     paddingLeft := 40
     paddingTop := 60
@@ -223,7 +224,7 @@ LevelSelect: class extends Actor {
 
     toScreen: func (i, j: Int) -> Vec2 {
 	x := gridPaddingLeft + i * (side + padding)
-	y := gridPaddingTop + j * (side + padding)
+	y := gridPaddingTop + j * (side + verticalPadding)
 	vec2(x, y)
     }
 
