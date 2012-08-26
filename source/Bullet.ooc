@@ -43,6 +43,11 @@ DamageLabel: class extends Actor {
 
 }
 
+BulletType: enum {
+    BUBBLE,
+    BULLET
+}
+
 Bullet: class extends Actor {
 
     engine: Engine
@@ -57,12 +62,17 @@ Bullet: class extends Actor {
 
     sprite: ImageSprite
 
+    type: BulletType
+
     init: func (=engine, =level, =pos, =dir) {
 	engine add(this)
 	ui = engine ui
 
-	sprite = ImageSprite new(pos, "assets/png/bullet.png")
-	sprite offset set!(-6, -6)
+	type = level hero hasPower(Power DGUN) ? BulletType BULLET : BulletType BUBBLE
+
+	sprite = ImageSprite new(pos, "assets/png/%s.png" format(type == BulletType BUBBLE ? "bubble" : "bullet"))
+	sprite offset set!(- sprite width / 2, - sprite height / 2)
+
 	level objectPass addSprite(sprite)
 	
 	box = Box new(vec2(0, 0), sprite width, sprite height)
@@ -79,7 +89,7 @@ Bullet: class extends Actor {
 	    if (bang) {
 		block touch(bang)
 
-		if (level hero hasPower(Power DGUN)) {
+		if (type == BulletType BULLET) {
 		    level play("fire")
 
 		    diff := level hero pos sub(level hero offset) sub(pos)
