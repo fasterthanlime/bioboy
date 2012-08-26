@@ -79,6 +79,10 @@ Hero: class extends Actor {
 	    velY = 12
 	}
 
+	if (velX > 12) {
+	    velX = 12
+	}
+
 	if (pos x < 0 ||
 	    pos y < 0 ||
 	    pos x > ui display width ||
@@ -140,13 +144,6 @@ Hero: class extends Actor {
 		}
 	    }
 
-	    if (bestXBang) {
-		running = true
-		pos add!(bestXBang dir mul(bestXBang depth))
-		if (bestXBlock image != "ice") {
-		    hadCollision = true
-		}
-	    }
 	    if (bestYBang) {
 		running = true
 		pos add!(bestYBang dir mul(bestYBang depth))
@@ -154,11 +151,23 @@ Hero: class extends Actor {
 		    hadCollision = true
 		}
 	    }
+	    if (bestXBang) {
+		running = true
+		pos add!(bestXBang dir mul(bestXBang depth))
+		velX = 0
+		if (bestXBlock image == "ice") {
+		    hadCollision = false
+		}
+	    }
 	}
 
 	if (hadCollision) {
-	    velX *= 0.9
+	    dampX()
 	}
+    }
+
+    dampX: func {
+	velX *= 0.9
     }
 
     die: func {

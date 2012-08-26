@@ -111,8 +111,10 @@ Block: class extends Actor {
 		level hero velX = -speed * factor
 	    case (dir y > 0.1) =>
 		level hero velY = speed * factor
+		level hero dampX()
 	    case (dir y < -0.1) =>
 		level hero velY = -speed * factor
+		level hero dampX()
 	}
     }
 

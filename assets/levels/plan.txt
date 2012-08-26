@@ -9,10 +9,6 @@ file: threeblocks.txt
 
 file: jaws.txt
 
-## Planning ahead
-
-file: ahead.txt
-
 ## Squishy boy
 
 file: fit-rack.txt
@@ -20,6 +16,18 @@ file: fit-rack.txt
 ## The gap
 
 file: the-gap.txt
+
+## Planning ahead
+
+file: ahead.txt
+
+## Lvl 95
+
+file: level95.txt
+
+## Lvl 97
+
+file: level97.txt
 
 # Icy kingdom
 
