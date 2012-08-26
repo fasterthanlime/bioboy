@@ -1,9 +1,10 @@
 
-import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input]
+import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
 import io/[FileReader, File]
 import structs/ArrayList
+import deadlogger/Log
 
-import Block, Hero
+import Block, Hero, TimeHelper
 
 Level: class extends Actor {
 
@@ -13,26 +14,72 @@ Level: class extends Actor {
     ui: UI
     hero: Hero
 
-    levelNum: Int
+    levelFile: String
+    onDone: Func (Bool)
 
-    init: func (=engine, =levelNum) {
+    pass, bgPass, objectPass, hudPass: Pass
+
+    lifeLabel: LabelSprite
+    timeLabel: LabelSprite
+
+    life := 0.0
+    millis: Long = 0
+
+    logger := static Log getLogger(This name)
+
+    init: func (=engine, =onDone) {
 	ui = engine ui
 
-	engine add(this)
-
-	fog := ImageSprite new(vec2(0, 0), "assets/png/fog.png")
-	ui bgPass addSprite(fog)
+	initPasses()
+	initBg()
+	initHud()
     
-	loadLevel()
-
 	ui input onKeyPress(Keys BACKSPACE, ||
 	    loadLevel()
 	)
+    }
 
-	loopMusic("yourdad")
+    initPasses: func {
+	pass = Pass new(ui, "level")
+	pass enabled = false
+	ui levelPass addPass(pass)
+
+	bgPass = Pass new(ui, "level-background")
+	pass addPass(bgPass)
+
+	objectPass = Pass new(ui, "level-objects")
+	pass addPass(objectPass)
+
+	hudPass = Pass new(ui, "level-hud")
+	pass addPass(hudPass)
+    }
+
+    initBg: func {
+	fog := ImageSprite new(vec2(0, 0), "assets/png/fog.png")
+	bgPass addSprite(fog)
+    }
+
+    initHud: func {
+	timeLabel = LabelSprite new(vec2(20, 50), "")
+	timeLabel fontSize = 40.0
+	timeLabel color set!(1.0, 1.0, 1.0)
+	hudPass addSprite(timeLabel)
+
+	lifeLabel = LabelSprite new(vec2(900, 50), "")
+	lifeLabel fontSize = 40.0
+	lifeLabel color set!(1.0, 1.0, 1.0)
+	hudPass addSprite(lifeLabel)
+    }
+
+    updateHud: func {
+	lifeLabel setText("%.0f%%" format(life))
+	timeLabel setText(TimeHelper format(millis))
     }
 
     update: func (delta: Float) {
+	millis += delta as Long
+	updateHud()
+
 	for(block in blocks) {
 	    block update(delta)
 	}
@@ -40,7 +87,10 @@ Level: class extends Actor {
 	hero update(delta)
     }
 
-    reset: func {
+    clear: func {
+	pass enabled = false
+	engine remove(this)
+
 	if (hero) {
 	    hero destroy()
 	    hero = null
@@ -62,8 +112,8 @@ Level: class extends Actor {
     }
 
     nextLevel: func {
-	levelNum += 1
-	loadLevel()
+	clear()
+	onDone(true)
     }
 
     play: func (sound: String) {
@@ -80,19 +130,28 @@ Level: class extends Actor {
 	}
     }
 
-    loadLevel: func {
-	reset()
-	
-	path := "assets/levels/level%d.txt" format(levelNum)
+    jumpTo: func (=levelFile) -> Bool {
+	loadLevel()
+    }
+
+    loadLevel: func -> Bool {
+	clear()
+
+	millis = 0
+	life = 100.0
+
+	path := "assets/levels/%s" format(levelFile)
 
 	f := File new(path)
 	if (!f exists?()) {
-	    levelNum = 1
-	    loadLevel()
-	    return
+	    play("uh-oh")
+	    ui flash("Level %s does not exist!" format(path))
+	    return false
 	}
 
 	fr := FileReader new(f)
+
+	logger info("Loading level %s" format(path))
 
 	heroPos := vec2(0, 0)
 
@@ -144,11 +203,15 @@ Level: class extends Actor {
 	hero = Hero new(engine, this, heroPos)
 
 	fr close()
+	
+	engine add(this)
+	pass enabled = true
+	
+	return true
     }
 
     createBlock: func (x, y: Int, type: String) -> Block {
 	block := Block new(engine, this, type, x, y)
-	ui levelPass addSprite(block sprite)
 	blocks add(block)
 	block
     }

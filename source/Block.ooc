@@ -30,6 +30,8 @@ Block: class extends Actor {
 
 	pos = vec2(x * SIDE, y * SIDE)
 	sprite = ImageSprite new(pos, path)
+	level objectPass addSprite(sprite)
+
 	box = Box new(pos, SIDE - 1, SIDE - 1)
 
 	setupAttributes()
@@ -115,7 +117,7 @@ Block: class extends Actor {
     }
 
     destroy: func {
-	level ui levelPass removeSprite(sprite)
+	level objectPass removeSprite(sprite)
     }
 
     _destroy: func {
