@@ -31,6 +31,10 @@ file: level95.txt
 
 file: ice1.txt
 
+## Ice wall
+
+file: ice2.txt
+
 ## Drill down
 
 file: drill.txt
