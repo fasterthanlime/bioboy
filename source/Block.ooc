@@ -1,6 +1,6 @@
 
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Collision]
-import Level, Hero
+import Level, Hero, Bullet
 
 Block: class extends Actor {
 
@@ -20,7 +20,10 @@ Block: class extends Actor {
     pos: Vec2
 
     inert := false
-    solid := false
+    solid := true
+
+    // only relevant for bomb (pretty code o/)
+    countdown := -1
 
     speed := 3.0
 
@@ -45,8 +48,8 @@ Block: class extends Actor {
 	    inert = true
 	}
 
-	if (image != "level-end") {
-	    solid = true
+	if (image == "level-end") {
+	    solid = false
 	}
     }
 
@@ -75,6 +78,10 @@ Block: class extends Actor {
 	match image {
 	    case "ice" =>
 		_destroy()
+	    case "bomb" =>
+		if (countdown <= 0) {
+		    countdown = 59
+		}
 	    case =>
 		if (!dead) {
 		    dir set!(orientation())
@@ -87,6 +94,21 @@ Block: class extends Actor {
 
 	if (playCount > 0) {
 	    playCount -= 1
+	}
+
+	if (countdown >= 0) {
+	    countdown -= 1
+	    newImage := "bomb%d" format(countdown / 10)
+	    if (image != newImage) {
+		"Should change image to %s" printfln(newImage)
+		image = newImage
+	    }
+
+	    if (countdown == 0) {
+		Explosion new(engine, level objectPass, pos, "boom")
+		level play("fire")
+		_destroy()
+	    }
 	}
 
 	moving := dir squaredNorm() > 0.01
