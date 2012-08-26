@@ -93,8 +93,12 @@ Hero: class extends Actor {
 	}
 
 	posDiff := pos sub(oldPos)
-	if (posDiff norm() <= 0.1) {
-	    velX = 0
+	if (posDiff norm() <= 0.01) {
+	    if (velX > 8.0) {
+		velX = 3.0
+	    } else {
+		velX *= 0.7
+	    }
 	}
     }
 
