@@ -5,10 +5,18 @@ import structs/ArrayList
 
 import Block, Hero
 
+Medal: enum {
+    NONE
+    BRONZE
+    SILVER
+    GOLD
+}
+
 Item: class {
 
     name: String
     file: String
+    medal := Medal NONE
 
     init: func (=name) {
     }
@@ -63,7 +71,7 @@ LevelSelect: class extends Actor {
     ui: UI
     input: Input
 
-    pass: Pass
+    pass, gridPass: Pass
     selector: ImageSprite
 
     colNum := 0
@@ -95,9 +103,12 @@ LevelSelect: class extends Actor {
 	pass = Pass new(ui, "level-select") 
 	ui statusPass addPass(pass)
 
+	gridPass = Pass new(ui, "level-select-grid")
+	pass addPass(gridPass)
+
 	setupEvents()
 
-	buildGrid()
+	buildUI()
 
 	clear()
     }
@@ -139,10 +150,16 @@ LevelSelect: class extends Actor {
 	nameLabel setText("%s" format(item name))
     }
 
+    success: func {
+	item medal = Medal BRONZE
+    }
+
     enter: func {
 	pass enabled = true
 	input enabled = true
 	engine add(this)
+
+	buildGrid()
 	updateSelector(0, 0)
     }
 
@@ -158,26 +175,8 @@ LevelSelect: class extends Actor {
 	vec2(x, y)
     }
 
-    buildGrid: func {
+    buildUI: func {
 	plan = Plan new("plan")
-
-	for (j in 0..plan rows size) {
-	    row = plan rows get(j)
-	    for (i in 0..row items size) {
-		item = row items get(i)
-
-		rect := RectSprite new(toScreen(i, j))
-		if (i == row items size - 1) {
-		    rect color set!(1.0, 1.0, 0.0)
-		} else {
-		    rect color set!(1.0, 1.0, 1.0)
-		}
-		rect filled = false
-		rect thickness = 1
-		rect size set!(side, side)
-		pass addSprite(rect)
-	    }
-	}
 
 	selector = RectSprite new(toScreen(0, 0))
 	selector size set!(side + 5, side + 5)
@@ -197,6 +196,32 @@ LevelSelect: class extends Actor {
 	pointsLabel = LabelSprite new(vec2(50, 700), "%d" format(points))
 	pointsLabel color set!(1.0, 1.0, 1.0)
 	pass addSprite(pointsLabel)
+
+	buildGrid()
+    }
+
+    buildGrid: func {
+	gridPass reset()
+
+	for (j in 0..plan rows size) {
+	    row = plan rows get(j)
+	    for (i in 0..row items size) {
+		pos := toScreen(i, j)
+		item = row items get(i)
+
+		// Rubyists, you may start laughing now
+		sprite := match (item medal) {
+		    case Medal NONE   => "none"
+		    case Medal BRONZE => "bronze"
+		    case Medal SILVER => "silver"
+		    case Medal GOLD   => "gold"
+		}
+
+		medalSprite := ImageSprite new(pos, "assets/png/%s.png" format(sprite))
+		medalSprite offset set!(- medalSprite width / 2, - medalSprite height / 2)
+		gridPass addSprite(medalSprite)
+	    }
+	}
     }
 
     update: func (delta: Float) {

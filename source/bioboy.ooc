@@ -37,6 +37,9 @@ Game: class {
 	engine := Engine new(config)
 
 	level = Level new(engine, |success|
+	    if (success) {
+		levelSelect success()
+	    }
 	    levelSelect	updateSelector(success ? 1 : 0, 0)
 	    levelSelect enter()
 	)
