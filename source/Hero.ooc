@@ -1,6 +1,6 @@
 
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Collision, Display]
-import Level, Block, Bullet
+import Level, Block, Bullet, Power
 import math/Random, structs/ArrayList
 
 Hero: class extends Actor {
@@ -24,15 +24,6 @@ Hero: class extends Actor {
 
     sprite: ImageSprite
 
-    // powers
-    dgun := false
-    armor := false
-    jetpack := false
-    bomb := false
-    block := false
-    slow := false
-    hook := false
-
     init: func (=engine, =level, =pos) {
 	ui = engine ui
 
@@ -54,25 +45,21 @@ Hero: class extends Actor {
 	input onKeyPress(Keys UP, || fire())
 	input onKeyPress(Keys DOWN, || fire())
 
-	input onKeyPress(Keys F1, || togglePower(1))
-	input onKeyPress(Keys F2, || togglePower(2))
-	input onKeyPress(Keys F3, || togglePower(3))
-	input onKeyPress(Keys F4, || togglePower(4))
-	input onKeyPress(Keys F5, || togglePower(5))
-	input onKeyPress(Keys F6, || togglePower(6))
-	input onKeyPress(Keys F7, || togglePower(7))
+	input onKeyPress(Keys F1, || togglePower(Power DGUN))
+	input onKeyPress(Keys F2, || togglePower(Power ARMOR))
+	input onKeyPress(Keys F3, || togglePower(Power JETPACK))
+	input onKeyPress(Keys F4, || togglePower(Power BOMB))
+	input onKeyPress(Keys F5, || togglePower(Power BLOCK))
+	input onKeyPress(Keys F6, || togglePower(Power SLOW))
+	input onKeyPress(Keys F7, || togglePower(Power HOOK))
     }
 
-    togglePower: func (which: Int) {
-	match which {
-	    case 1 => dgun = !dgun
-	    case 2 => armor = !armor
-	    case 3 => jetpack = !jetpack
-	    case 4 => bomb = !bomb
-	    case 5 => block = !block
-	    case 6 => slow = !slow
-	    case 7 => hook = !hook
-	}
+    togglePower: func (which: Power) {
+	level levelSelect togglePower(which)
+    }
+
+    hasPower: func (which: Power) -> Bool {
+	level levelSelect hasPower(which)
     }
 
     fire: func {
@@ -100,6 +87,12 @@ Hero: class extends Actor {
     }
 
     update: func (delta: Float) {
+	if (input isPressed(Keys CTRL)) {
+	    engine slomo = true
+	} else {
+	    engine slomo = false
+	}
+
 	oldPos set!(pos)
 	pos add!(velX, velY)
 

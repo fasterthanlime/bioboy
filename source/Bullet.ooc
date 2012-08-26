@@ -1,6 +1,6 @@
 
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Collision, Pass, Colors]
-import Level, Block, Hero
+import Level, Block, Hero, Power
 
 DamageLabel: class extends Actor {
 
@@ -79,10 +79,13 @@ Bullet: class extends Actor {
 	    if (bang) {
 		block touch(bang)
 
-		if (level hero dgun) {
+		if (level hero hasPower(Power DGUN)) {
 		    level play("fire")
 
-		    dist := level hero pos sub(level hero offset) sub(pos) norm()
+		    diff := level hero pos sub(level hero offset) sub(pos)
+		    diff x *= 1.2
+
+		    dist := diff norm()
 		    radius := 180.0
 		    recoil := 8.0
 
@@ -94,9 +97,8 @@ Bullet: class extends Actor {
 
 		    damageRadius := 60.0
 		    damage := 40
-		    armor := (level hero armor ? 0.3 : 1.0)
+		    armor := (level hero hasPower(Power ARMOR) ? 0.3 : 1.0)
 
-		    "dist = %.2f, damageRadius = %.2f" printfln(dist, damageRadius)
 		    if (dist < damageRadius) {
 			totalDamage := (damageRadius - dist) / damageRadius * damage * armor
 			if (totalDamage > 1.0) {

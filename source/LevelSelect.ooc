@@ -3,7 +3,7 @@ import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
 import io/[FileReader, File]
 import structs/ArrayList
 
-import Block, Hero
+import Block, Hero, Power
 
 Medal: enum {
     NONE
@@ -67,6 +67,15 @@ Plan: class {
 
 LevelSelect: class extends Actor {
 
+    // powers
+    dgun := false
+    armor := false
+    jetpack := false
+    bomb := false
+    block := false
+    slow := false
+    hook := false
+
     engine: Engine
     ui: UI
     input: Input
@@ -111,6 +120,31 @@ LevelSelect: class extends Actor {
 	buildUI()
 
 	clear()
+    }
+
+    togglePower: func (which: Power) {
+	match which {
+	    case Power DGUN => dgun = !dgun
+	    case Power ARMOR => armor = !armor
+	    case Power JETPACK => jetpack = !jetpack
+	    case Power BOMB => bomb = !bomb
+	    case Power BLOCK => block = !block
+	    case Power SLOW => slow = !slow
+	    case Power HOOK => hook = !hook
+	}
+    }
+
+    hasPower: func (which: Power) -> Bool {
+	match which {
+	    case Power DGUN => dgun
+	    case Power ARMOR => armor
+	    case Power JETPACK => jetpack
+	    case Power BOMB => bomb
+	    case Power BLOCK => block
+	    case Power SLOW => slow
+	    case Power HOOK => hook
+	    case => false
+	}
     }
 
     setupEvents: func {

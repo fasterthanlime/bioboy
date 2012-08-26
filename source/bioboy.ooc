@@ -36,18 +36,18 @@ Game: class {
 
 	engine := Engine new(config)
 
-	level = Level new(engine, |success|
+	levelSelect = LevelSelect new(engine, |levelFile|
+	    if(level jumpTo(levelFile)) {
+		levelSelect clear()
+	    }
+	)
+
+	level = Level new(engine, levelSelect, |success|
 	    if (success) {
 		levelSelect success()
 	    }
 	    levelSelect	updateSelector(success ? 1 : 0, 0)
 	    levelSelect enter()
-	)
-
-	levelSelect = LevelSelect new(engine, |levelFile|
-	    if(level jumpTo(levelFile)) {
-		levelSelect clear()
-	    }
 	)
 
 	menu = Menu new(engine, ||

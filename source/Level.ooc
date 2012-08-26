@@ -4,10 +4,11 @@ import io/[FileReader, File]
 import structs/ArrayList
 import deadlogger/Log
 
-import Block, Hero, TimeHelper
+import Block, Hero, TimeHelper, LevelSelect, Power
 
 Level: class extends Actor {
 
+    levelSelect: LevelSelect
     engine: Engine
     blocks := ArrayList<Block> new()
 
@@ -29,7 +30,7 @@ Level: class extends Actor {
 
     logger := static Log getLogger(This name)
 
-    init: func (=engine, =onDone) {
+    init: func (=engine, =levelSelect, =onDone) {
 	ui = engine ui
 	input = ui input sub()
 
@@ -84,12 +85,14 @@ Level: class extends Actor {
 	lifeLabel setText("%.0f%%" format(life))
 	timeLabel setText(TimeHelper format(millis))
 
-	dgunLabel color set!(hero dgun ? Colors red : Colors grey)
-	armorLabel color set!(hero armor ? Colors red : Colors grey)
+	dgunLabel color set!(hero hasPower(Power DGUN) ? Colors red : Colors grey)
+	armorLabel color set!(hero hasPower(Power ARMOR) ? Colors red : Colors grey)
     }
 
     update: func (delta: Float) {
-	millis += delta as Long
+	factor := engine slomo ? 0.5 : 1.0
+
+	millis += (delta * factor) as Long
 	updateHud()
 
 	for(block in blocks) {
