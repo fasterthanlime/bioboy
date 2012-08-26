@@ -1,36 +1,48 @@
 
 # Overworld
 
-## Too easy
+## Ground zero
 
-file: level1.txt
+file: threeblocks.txt
 
-## All together now
+## Jaws
 
-file: level3.txt
+file: jaws.txt
+
+## Planning ahead
+
+file: ahead.txt
+
+## The gap
+
+file: the-gap.txt
+
+## Squishy boy
+
+file: fit-rack.txt
 
 # Icy kingdom
 
-## Woopsy doo
+## Slide away
 
-file: level2.txt
+file: ice1.txt
 
 # Booma park
 
 ## No sweat
 
-file: level6.txt
+file: booma1.txt
 
 # Spike land
 
 ## Friendly.. not?
 
-file: level5.txt
+file: spike1.txt
 
 # Black valley
 
 ## Hell on earth
 
-file: level4.txt
+file: valley1.txt
 
 

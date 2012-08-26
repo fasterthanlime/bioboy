@@ -78,7 +78,6 @@ Hero: class extends Actor {
 	if (velY > 12) {
 	    velY = 12
 	}
-	velX *= 0.9
 
 	if (pos x < 0 ||
 	    pos y < 0 ||
@@ -91,6 +90,7 @@ Hero: class extends Actor {
     handleCollisions: func {
 	running := true
 
+	hadCollision := false
 	counter := 0
 	while (running) {
 	    counter += 1
@@ -104,7 +104,10 @@ Hero: class extends Actor {
 	    running = false
 
 	    bestXBang: Bang = null
+	    bestXBlock: Block = null
+
 	    bestYBang: Bang = null
+	    bestYBlock: Block = null
 
 	    for(block in level blocks) {
 		bang := box collide(block box)
@@ -115,10 +118,12 @@ Hero: class extends Actor {
 			if (bang dir y == 0) {
 			    if (!bestXBang || bang depth < bestXBang depth) {
 				bestXBang = bang
+				bestXBlock = block
 			    }
 			} else {
 			    if (!bestYBang || bang depth < bestYBang depth) {
 				bestYBang = bang
+				bestYBlock = block
 			    }
 			}
 
@@ -138,11 +143,21 @@ Hero: class extends Actor {
 	    if (bestXBang) {
 		running = true
 		pos add!(bestXBang dir mul(bestXBang depth))
+		if (bestXBlock image != "ice") {
+		    hadCollision = true
+		}
 	    }
 	    if (bestYBang) {
 		running = true
 		pos add!(bestYBang dir mul(bestYBang depth))
+		if (bestYBlock image != "ice") {
+		    hadCollision = true
+		}
 	    }
+	}
+
+	if (hadCollision) {
+	    velX *= 0.9
 	}
     }
 

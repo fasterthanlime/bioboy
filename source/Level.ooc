@@ -2,6 +2,7 @@
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
 import io/[FileReader, File]
 import structs/ArrayList
+import deadlogger/Log
 
 import Block, Hero, TimeHelper
 
@@ -23,6 +24,8 @@ Level: class extends Actor {
 
     life := 0.0
     millis: Long = 0
+
+    logger := static Log getLogger(This name)
 
     init: func (=engine, =onDone) {
 	ui = engine ui
@@ -147,6 +150,8 @@ Level: class extends Actor {
 	}
 
 	fr := FileReader new(f)
+
+	logger info("Loading level %s" format(path))
 
 	heroPos := vec2(0, 0)
 
