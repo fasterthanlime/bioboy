@@ -2,8 +2,9 @@
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
 import io/[FileReader, File]
 import structs/ArrayList
+import deadlogger/Log
 
-import Block, Hero
+import Block, Hero, TimeHelper
 
 Level: class extends Actor {
 
@@ -13,16 +14,25 @@ Level: class extends Actor {
     ui: UI
     hero: Hero
 
-    levelNum: Int
+    levelFile: String
+    onDone: Func (Bool)
 
-    pass, bgPass, objectPass: Pass
+    pass, bgPass, objectPass, hudPass: Pass
 
-    init: func (=engine, =levelNum) {
+    lifeLabel: LabelSprite
+    timeLabel: LabelSprite
+
+    life := 0.0
+    millis: Long = 0
+
+    logger := static Log getLogger(This name)
+
+    init: func (=engine, =onDone) {
 	ui = engine ui
 
 	initPasses()
 	initBg()
-	
+	initHud()
     
 	ui input onKeyPress(Keys BACKSPACE, ||
 	    loadLevel()
@@ -39,6 +49,9 @@ Level: class extends Actor {
 
 	objectPass = Pass new(ui, "level-objects")
 	pass addPass(objectPass)
+
+	hudPass = Pass new(ui, "level-hud")
+	pass addPass(hudPass)
     }
 
     initBg: func {
@@ -46,7 +59,27 @@ Level: class extends Actor {
 	bgPass addSprite(fog)
     }
 
+    initHud: func {
+	timeLabel = LabelSprite new(vec2(20, 50), "")
+	timeLabel fontSize = 40.0
+	timeLabel color set!(1.0, 1.0, 1.0)
+	hudPass addSprite(timeLabel)
+
+	lifeLabel = LabelSprite new(vec2(900, 50), "")
+	lifeLabel fontSize = 40.0
+	lifeLabel color set!(1.0, 1.0, 1.0)
+	hudPass addSprite(lifeLabel)
+    }
+
+    updateHud: func {
+	lifeLabel setText("%.0f%%" format(life))
+	timeLabel setText(TimeHelper format(millis))
+    }
+
     update: func (delta: Float) {
+	millis += delta as Long
+	updateHud()
+
 	for(block in blocks) {
 	    block update(delta)
 	}
@@ -79,8 +112,8 @@ Level: class extends Actor {
     }
 
     nextLevel: func {
-	levelNum += 1
-	loadLevel()
+	clear()
+	onDone(true)
     }
 
     play: func (sound: String) {
@@ -97,22 +130,28 @@ Level: class extends Actor {
 	}
     }
 
-    loadLevel: func {
-	clear()
-	
-	engine add(this)
-	pass enabled = true
+    jumpTo: func (=levelFile) -> Bool {
+	loadLevel()
+    }
 
-	path := "assets/levels/level%d.txt" format(levelNum)
+    loadLevel: func -> Bool {
+	clear()
+
+	millis = 0
+	life = 100.0
+
+	path := "assets/levels/%s" format(levelFile)
 
 	f := File new(path)
 	if (!f exists?()) {
-	    levelNum = 1
-	    loadLevel()
-	    return
+	    play("uh-oh")
+	    ui flash("Level %s does not exist!" format(path))
+	    return false
 	}
 
 	fr := FileReader new(f)
+
+	logger info("Loading level %s" format(path))
 
 	heroPos := vec2(0, 0)
 
@@ -164,114 +203,17 @@ Level: class extends Actor {
 	hero = Hero new(engine, this, heroPos)
 
 	fr close()
+	
+	engine add(this)
+	pass enabled = true
+	
+	return true
     }
 
     createBlock: func (x, y: Int, type: String) -> Block {
 	block := Block new(engine, this, type, x, y)
-	ui levelPass addSprite(block sprite)
 	blocks add(block)
 	block
     }
 
 }
-
-
-StoryCard: class {
-    image: String
-    lines := ArrayList<String> new()
-
-    init: func (=image) {}
-}
-
-
-Story: class extends Actor {
-
-    engine: Engine
-
-    ui: UI
-    input: Input
-    pass: Pass
-
-    name: String
-    cards := ArrayList<StoryCard> new()
-    cardNum := 0
-
-    onDone: Func
-
-    init: func (=engine, =name, =onDone) {
-	ui = engine ui
-	input = ui input sub()
-    
-	loadStory()
-	pass = Pass new(ui, "story")
-	ui statusPass addPass(pass)
-
-	input onKeyPress(Keys SPACE, ||
-	    nextCard()
-	)
-    }
-
-    loadStory: func () {
-	fr := FileReader new("assets/story/%s.txt" format(name))
-
-	while (fr hasNext?()) {
-	    card := StoryCard new(fr readLine())
-	    cards add(card)
-
-	    fr readLine() // skip blank line after image path
-
-	    while (fr hasNext?()) {
-		line := fr readLine()
-
-		if (line empty?()) {
-		    break
-		}
-
-		card lines add(line)
-	    }
-	}
-    }
-
-    clear: func {
-	pass reset()
-	pass enabled = false
-	input enabled = false
-    }
-
-    nextCard: func {
-	cardNum += 1
-
-	if (cards size <= cardNum) {
-	    clear()
-	    onDone()
-	} else {
-	    loadCard()
-	}
-    }
-
-    loadCard: func {
-	clear()
-
-	pass enabled = true
-	input enabled = true
-
-	// image
-        card := cards get(cardNum)
-	bg := ImageSprite new(vec2(0, 0), "assets/png/%s.png" format(card image))
-	pass addSprite(bg)
-
-	// lines
-	pos := vec2(200, 600)
-	for (line in card lines) {
-	    sprite := LabelSprite new(pos, line)
-	    sprite color set!(0.8, 0.8, 0.8)
-	    sprite fontSize = 30.0
-	    pass addSprite(sprite)
-
-	    pos = pos add(0, 30)
-	}
-    }
-
-}
-
-

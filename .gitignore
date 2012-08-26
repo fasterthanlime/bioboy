@@ -1,5 +1,5 @@
 # Ignore binary file
-warmup
+bioboy
 
 # Ignore .libs files and rock_tmp (output of the compiler)
 .libs

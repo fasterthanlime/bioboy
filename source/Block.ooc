@@ -13,6 +13,7 @@ Block: class extends Actor {
     x, y: Int
 
     permanent := false
+    dead := false
 
     box: Box
     dir := vec2(0, 0)
@@ -21,7 +22,9 @@ Block: class extends Actor {
     inert := false
     solid := false
 
-    speed := 6.0
+    speed := 3.0
+
+    playCount := 0
 
     sprite: ImageSprite
 
@@ -53,23 +56,42 @@ Block: class extends Actor {
 	}
     }
 
-    kick: func {
+    orientation: func -> Vec2 {
 	match image {
 	    case "dblock-r" =>
-		dir set!(1, 0)
+		vec2(1, 0)
 	    case "dblock-l" =>
-		dir set!(-1, 0)
+		vec2(-1, 0)
 	    case "dblock-d" =>
-		dir set!(0, 1)
+		vec2(0, 1)
 	    case "dblock-u" =>
-		dir set!(0, -1)
+		vec2(0, -1)
+	    case =>
+		vec2(0, 0)
+	}
+    }
+
+    kick: func {
+	match image {
 	    case "ice" =>
 		_destroy()
+	    case =>
+		if (!dead) {
+		    dir set!(orientation())
+		}
 	}
     }
 
     update: func (delta: Float) {
-	if (dir squaredNorm() > 0.01) {
+	if (dead) return
+
+	if (playCount > 0) {
+	    playCount -= 1
+	}
+
+	moving := dir squaredNorm() > 0.01
+
+	if (moving) {
 	    pos add!(dir mul(speed))
 
 	    for (block in level blocks) {
@@ -77,15 +99,30 @@ Block: class extends Actor {
 		bang := box collide(block box)
 		if (bang) {
 		    if (block inert || block dir squaredNorm() < 0.1) {
-			block touch(bang)
+			dir1 := dir
+			dir2 := block orientation()
+			dot := dir1 dot(dir2)
+			//"our dir = %s, their dir = %s, dot = %.2f" printfln(dir1 _, dir2 _, dot)
+
+			if (dot >= -0.5) {
+			    block touch(bang)
+			}
+
 			pos add!(bang dir mul(bang depth))
 			pos set!(pos snap(SIDE))
 			if (permanent) {
 			    dir set!(dir mul(-1))
 			} else {
 			    dir set!(0, 0)
+			    if (block inert) {
+				dead = true	
+			    }
 			}
-			level play("boom")
+
+			if (playCount <= 0) {
+			    level play("boom")
+			    playCount = 15
+			}
 		    }
 		}
 	    }
@@ -102,7 +139,7 @@ Block: class extends Actor {
     }
 
     applyThrust: func {
-	factor := 1.2
+	factor := 1.11
 
 	match true {
 	    case (dir x > 0.1) =>
@@ -111,8 +148,10 @@ Block: class extends Actor {
 		level hero velX = -speed * factor
 	    case (dir y > 0.1) =>
 		level hero velY = speed * factor
+		level hero dampX()
 	    case (dir y < -0.1) =>
 		level hero velY = -speed * factor
+		level hero dampX()
 	}
     }
 

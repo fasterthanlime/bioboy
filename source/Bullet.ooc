@@ -10,7 +10,7 @@ Bullet: class extends Actor {
 
     pos: Vec2
     dir: Vec2
-    speed := 16.0
+    speed := 12.0
 
     box: Box
 
@@ -41,8 +41,8 @@ Bullet: class extends Actor {
 
 	        dist := level hero pos sub(pos) norm()
 
-		radius := 160.0
-		recoil := 16.0
+		radius := 180.0
+		recoil := 8.0
 
 		if (dist < radius) {
 		    factor := - (1.0 - dist / radius) * recoil
