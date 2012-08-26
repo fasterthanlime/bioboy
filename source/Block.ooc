@@ -61,7 +61,7 @@ Block: class extends Actor {
 
     explodeTouch: func {
 	if (image startsWith?("bomb")) {
-	    countdown = 8
+	    countdown = 4
 	} else {
 	    _destroy()
 	}
