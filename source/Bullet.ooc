@@ -131,6 +131,8 @@ Bullet: class extends Actor {
 	for(block in level blocks) {
 	    bang := box collide(block box)
 	    if (bang) {
+		if (block permeable) continue
+
 		block touch(bang)
 
 		if (type == BulletType BULLET) {

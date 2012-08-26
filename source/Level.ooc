@@ -1,5 +1,5 @@
 
-import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass, Colors]
+import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass, Colors, Collision]
 import io/[FileReader, File]
 import structs/ArrayList
 import deadlogger/Log
@@ -95,6 +95,41 @@ Level: class extends Actor {
 
 	armorLabel = LabelSprite new(vec2(120, 730), "ARMOR (F2)")
 	hudPass addSprite(armorLabel)
+    }
+
+    eachNeighbor: func (pos: Vec2, f: Func (Block)) {
+	minX := pos x - Block SIDE * 1.5
+	maxX := pos x + Block SIDE * 1.5
+	minY := pos y - Block SIDE * 1.5
+	maxY := pos y + Block SIDE * 1.5
+
+	rectSprite := RectSprite new(pos)
+	rectSprite size set!(vec(1,1) mul(Block SIDE * 3))
+	rectSprite offset set!(Block SIDE / 2, Block SIDE / 2)
+	rectSprite alpha = 0.5
+	objectPass addSprite(rectSprite)
+
+	neighbors := ArrayList<Block> new()
+
+	for (block in blocks) {
+	    has := false
+
+	    if (block pos x >= minX && block pos x <= maxX &&
+		block pos y >= minY && block pos y <= maxY) {
+		neighbors add(block)
+		has = true
+	    }
+
+	    blockSprite := RectSprite new(block pos)
+	    blockSprite offset set!(Block SIDE / 2, Block SIDE / 2)
+	    blockSprite alpha = 0.5
+	    blockSprite color set!(0, 1, has ? 1 : 0)
+	    blockSprite filled = false
+	    blockSprite size set!(block sprite width, block sprite height)
+	    objectPass addSprite(blockSprite)
+	}
+
+	neighbors each (|n| f(n))
     }
 
     updateHud: func {
@@ -245,6 +280,8 @@ Level: class extends Actor {
 	engine add(this)
 	pass enabled = true
 	input enabled = true
+
+	"Level has %d blocks" printfln(blocks size)
 	
 	return true
     }

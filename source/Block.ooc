@@ -14,6 +14,8 @@ Block: class extends Actor {
 
     permanent := false
     dead := false
+    destructible := true
+    permeable := false
 
     box: Box
     dir := vec2(0, 0)
@@ -50,6 +52,18 @@ Block: class extends Actor {
 
 	if (image == "level-end") {
 	    solid = false
+	}
+
+	if (image == "net") {
+	    permeable = true
+	}
+    }
+
+    explodeTouch: func {
+	if (image startsWith?("bomb")) {
+	    countdown = 8
+	} else {
+	    _destroy()
 	}
     }
 
@@ -108,8 +122,11 @@ Block: class extends Actor {
 	    }
 
 	    if (countdown == 0) {
-		Explosion new(engine, level objectPass, pos add(sprite width / 2, sprite height / 2), "boom")
+		Explosion new(engine, level objectPass, pos add(sprite width / 2, sprite height / 2), "prouf")
 		level play("prouf")
+		level eachNeighbor(pos, |n|
+		    n explodeTouch()
+		)
 		_destroy()
 	    }
 	}
