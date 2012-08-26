@@ -121,7 +121,7 @@ LevelSelect: class extends Actor {
 	input = ui input sub()
 
 	pass = Pass new(ui, "level-select") 
-	ui statusPass addPass(pass)
+	ui levelPass addPass(pass)
 
 	gridPass = Pass new(ui, "level-select-grid")
 	pass addPass(gridPass)
@@ -201,9 +201,13 @@ LevelSelect: class extends Actor {
 	recordLabel setText(TimeHelper format(item recordTime))
     }
 
-    success: func {
+    success: func (millis: Long) {
 	if (item medal < Medal BRONZE) {
 	    item medal = Medal BRONZE
+	}
+	if (item recordTime == -1 || millis < item recordTime) {
+	    item recordTime = millis
+	    ui flash("New record: %s for %s!" format(TimeHelper format(millis), item name))
 	}
     }
 

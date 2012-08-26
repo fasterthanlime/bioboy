@@ -111,10 +111,12 @@ Hero: class extends Actor {
 	    pos y < 0 ||
 	    pos x > ui display width ||
 	    pos y > ui display height) {
+	    ui flash("You got lost in the abyss...")
 	    die()
 	}
 	
 	if (level life <= 0.0) {
+	    ui flash("Murdered by your own weapon!")
 	    die()
 	}
 
@@ -136,6 +138,7 @@ Hero: class extends Actor {
 	while (running) {
 	    counter += 1
 	    if (counter > 16) {
+		ui flash("Squashed like a bug!")
 		die()
 		break
 	    }
@@ -174,7 +177,6 @@ Hero: class extends Actor {
 		    }
 
 		    if (block image == "level-end") {
-			ui flash("You won!")
 			level play(Random choice(winSounds))
 			level nextLevel()
 		    }
@@ -209,7 +211,6 @@ Hero: class extends Actor {
     }
 
     die: func {
-	ui flash("You died!")
 	level play(Random choice(loseSounds))
 	level loadLevel()
     }

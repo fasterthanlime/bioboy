@@ -45,7 +45,7 @@ Game: class {
 
 	level = Level new(engine, levelSelect, |success|
 	    if (success) {
-		levelSelect success()
+		levelSelect success(level millis)
 	    }
 	    levelSelect	updateSelector(success ? 1 : 0, 0)
 	    levelSelect enter()
