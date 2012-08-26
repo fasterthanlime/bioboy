@@ -100,8 +100,11 @@ Block: class extends Actor {
 	    countdown -= 1
 	    newImage := "bomb%d" format(countdown / 10)
 	    if (image != newImage) {
-		"Should change image to %s" printfln(newImage)
 		image = newImage
+
+		level objectPass removeSprite(sprite)
+		sprite = ImageSprite new(pos, "assets/png/%s.png" format(image))
+		level objectPass addSprite(sprite)
 	    }
 
 	    if (countdown == 0) {
