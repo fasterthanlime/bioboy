@@ -75,6 +75,9 @@ Level: class extends Actor {
 
 	dgunLabel = LabelSprite new(vec2(20, 730), "DGUN (F1)")
 	hudPass addSprite(dgunLabel)
+
+	armorLabel = LabelSprite new(vec2(120, 730), "ARMOR (F2)")
+	hudPass addSprite(armorLabel)
     }
 
     updateHud: func {
@@ -82,6 +85,7 @@ Level: class extends Actor {
 	timeLabel setText(TimeHelper format(millis))
 
 	dgunLabel color set!(hero dgun ? Colors red : Colors grey)
+	armorLabel color set!(hero armor ? Colors red : Colors grey)
     }
 
     update: func (delta: Float) {

@@ -55,12 +55,12 @@ Hero: class extends Actor {
 	input onKeyPress(Keys DOWN, || fire())
 
 	input onKeyPress(Keys F1, || togglePower(1))
-	input onKeyPress(Keys F1, || togglePower(2))
-	input onKeyPress(Keys F1, || togglePower(3))
-	input onKeyPress(Keys F1, || togglePower(4))
-	input onKeyPress(Keys F1, || togglePower(5))
-	input onKeyPress(Keys F1, || togglePower(6))
-	input onKeyPress(Keys F1, || togglePower(7))
+	input onKeyPress(Keys F2, || togglePower(2))
+	input onKeyPress(Keys F3, || togglePower(3))
+	input onKeyPress(Keys F4, || togglePower(4))
+	input onKeyPress(Keys F5, || togglePower(5))
+	input onKeyPress(Keys F6, || togglePower(6))
+	input onKeyPress(Keys F7, || togglePower(7))
     }
 
     togglePower: func (which: Int) {
@@ -118,6 +118,10 @@ Hero: class extends Actor {
 	    pos y < 0 ||
 	    pos x > ui display width ||
 	    pos y > ui display height) {
+	    die()
+	}
+	
+	if (level life <= 0.0) {
 	    die()
 	}
 

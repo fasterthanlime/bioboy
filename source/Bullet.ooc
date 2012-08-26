@@ -1,6 +1,47 @@
 
-import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Collision]
+import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Collision, Pass, Colors]
 import Level, Block, Hero
+
+DamageLabel: class extends Actor {
+
+    engine: Engine
+    pass: Pass
+
+    sprite: LabelSprite
+
+    counter := 0
+    maxCounter := 100
+
+    init: func (=engine, =pass, pos: Vec2, damage: Int) {
+	sprite = LabelSprite new(pos, "- %d" format(damage))
+	sprite fontSize = 30.0
+	sprite color set!(Colors red)
+
+	engine add(this)
+	pass addSprite(sprite)
+    }
+
+    update: func (delta: Float) {
+	counter += 1
+
+	sprite alpha = (maxCounter - counter) / (1.0 * maxCounter)
+	sprite pos add!(0, -1)
+
+	if (counter >= maxCounter) {
+	    destroy()
+	}
+    }
+
+    destroy: func {
+	pass removeSprite(sprite)
+    }
+
+    _destroy: func {
+	destroy()
+	engine remove(this)
+    }
+
+}
 
 Bullet: class extends Actor {
 
@@ -41,7 +82,7 @@ Bullet: class extends Actor {
 		if (level hero dgun) {
 		    level play("fire")
 
-		    dist := level hero pos sub(pos) norm()
+		    dist := level hero pos sub(level hero offset) sub(pos) norm()
 		    radius := 180.0
 		    recoil := 8.0
 
@@ -49,6 +90,20 @@ Bullet: class extends Actor {
 			factor := - (1.0 - dist / radius) * recoil
 			level hero velX += factor * dir x
 			level hero velY += factor * dir y
+		    }
+
+		    damageRadius := 60.0
+		    damage := 40
+		    armor := (level hero armor ? 0.3 : 1.0)
+
+		    "dist = %.2f, damageRadius = %.2f" printfln(dist, damageRadius)
+		    if (dist < damageRadius) {
+			totalDamage := (damageRadius - dist) / damageRadius * damage * armor
+			if (totalDamage > 1.0) {
+
+			    DamageLabel new(engine, level hudPass, level hero pos add(0, -10), totalDamage)
+			    level life -= totalDamage
+			}
 		    }
 		} else {
 		    level play("plop")
