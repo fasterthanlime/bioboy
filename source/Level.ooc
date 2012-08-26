@@ -38,11 +38,11 @@ Level: class extends Actor {
 	initBg()
 	initHud()
     
-	ui input onKeyPress(Keys BACKSPACE, ||
+	input onKeyPress(Keys BACKSPACE, ||
 	    loadLevel()
 	)
 
-	ui input onKeyPress(Keys ESC, ||
+	input onKeyPress(Keys ESC, ||
 	    clear()
 	    onDone(false)
 	)
@@ -218,6 +218,12 @@ Level: class extends Actor {
 		case 'u' =>
 		    b := createBlock(x, y, "dblock-d")
 		    b permanent = true
+
+		case 'b' =>
+		    createBlock(x, y, "bomb")
+
+		case '-' =>
+		    createBlock(x, y, "net")
 
 		case '=' =>
 		    createBlock(x, y, "inert")

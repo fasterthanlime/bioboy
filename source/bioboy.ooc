@@ -44,6 +44,9 @@ Game: class {
 	    if(level jumpTo(levelFile)) {
 		levelSelect clear()
 	    }
+	, ||
+	    levelSelect clear()
+	    menu enter()
 	)
 
 	level = Level new(engine, levelSelect, |success|

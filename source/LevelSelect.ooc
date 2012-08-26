@@ -115,8 +115,9 @@ LevelSelect: class extends Actor {
     points := 0
 
     onPlay: Func (String)
+    onExit: Func
 
-    init: func (=engine, =onPlay) {
+    init: func (=engine, =onPlay, =onExit) {
 	ui = engine ui
 	input = ui input sub()
 
@@ -168,6 +169,12 @@ LevelSelect: class extends Actor {
 	input onKeyPress(Keys DOWN,  || updateSelector(0, 1))
 
 	input onKeyPress(Keys ENTER, || takeAction())
+	input onKeyPress(Keys ESC, || leave())
+    }
+
+    leave: func {
+	clear()
+	onExit()
     }
 
     takeAction: func {

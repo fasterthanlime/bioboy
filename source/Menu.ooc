@@ -54,6 +54,11 @@ Menu: class extends Actor {
 	    takeAction()
 	)
 
+	input onKeyPress(Keys ESC, ||
+	    clear()
+	    engine quit()
+	)
+
 	clear()
     }
 
