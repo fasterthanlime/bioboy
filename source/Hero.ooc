@@ -24,6 +24,15 @@ Hero: class extends Actor {
 
     sprite: ImageSprite
 
+    // powers
+    dgun := false
+    armor := false
+    jetpack := false
+    bomb := false
+    block := false
+    slow := false
+    hook := false
+
     init: func (=engine, =level, =pos) {
 	ui = engine ui
 
@@ -38,12 +47,32 @@ Hero: class extends Actor {
     }
 
     setupEvents: func {
-	input = ui input sub()
+	input = level input sub()
 
 	input onKeyPress(Keys LEFT, || fire())
 	input onKeyPress(Keys RIGHT, || fire())
 	input onKeyPress(Keys UP, || fire())
 	input onKeyPress(Keys DOWN, || fire())
+
+	input onKeyPress(Keys F1, || togglePower(1))
+	input onKeyPress(Keys F1, || togglePower(2))
+	input onKeyPress(Keys F1, || togglePower(3))
+	input onKeyPress(Keys F1, || togglePower(4))
+	input onKeyPress(Keys F1, || togglePower(5))
+	input onKeyPress(Keys F1, || togglePower(6))
+	input onKeyPress(Keys F1, || togglePower(7))
+    }
+
+    togglePower: func (which: Int) {
+	match which {
+	    case 1 => dgun = !dgun
+	    case 2 => armor = !armor
+	    case 3 => jetpack = !jetpack
+	    case 4 => bomb = !bomb
+	    case 5 => block = !block
+	    case 6 => slow = !slow
+	    case 7 => hook = !hook
+	}
     }
 
     fire: func {

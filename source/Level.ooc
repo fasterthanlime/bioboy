@@ -1,5 +1,5 @@
 
-import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
+import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass, Colors]
 import io/[FileReader, File]
 import structs/ArrayList
 import deadlogger/Log
@@ -18,9 +18,11 @@ Level: class extends Actor {
     onDone: Func (Bool)
 
     pass, bgPass, objectPass, hudPass: Pass
+    input: Input
 
-    lifeLabel: LabelSprite
-    timeLabel: LabelSprite
+    lifeLabel, timeLabel, dgunLabel, armorLabel,
+    jetpackLabel, bombLabel, blockLabel,
+    slowLabel, hookLabel: LabelSprite
 
     life := 0.0
     millis: Long = 0
@@ -29,6 +31,7 @@ Level: class extends Actor {
 
     init: func (=engine, =onDone) {
 	ui = engine ui
+	input = ui input sub()
 
 	initPasses()
 	initBg()
@@ -69,11 +72,16 @@ Level: class extends Actor {
 	lifeLabel fontSize = 40.0
 	lifeLabel color set!(1.0, 1.0, 1.0)
 	hudPass addSprite(lifeLabel)
+
+	dgunLabel = LabelSprite new(vec2(20, 730), "DGUN (F1)")
+	hudPass addSprite(dgunLabel)
     }
 
     updateHud: func {
 	lifeLabel setText("%.0f%%" format(life))
 	timeLabel setText(TimeHelper format(millis))
+
+	dgunLabel color set!(hero dgun ? Colors red : Colors grey)
     }
 
     update: func (delta: Float) {
@@ -89,6 +97,7 @@ Level: class extends Actor {
 
     clear: func {
 	pass enabled = false
+	input enabled = false
 	engine remove(this)
 
 	if (hero) {
@@ -206,6 +215,7 @@ Level: class extends Actor {
 	
 	engine add(this)
 	pass enabled = true
+	input enabled = true
 	
 	return true
     }

@@ -37,18 +37,23 @@ Bullet: class extends Actor {
 	    bang := box collide(block box)
 	    if (bang) {
 		block touch(bang)
-		level play("fire")
 
-	        dist := level hero pos sub(pos) norm()
+		if (level hero dgun) {
+		    level play("fire")
 
-		radius := 180.0
-		recoil := 8.0
+		    dist := level hero pos sub(pos) norm()
+		    radius := 180.0
+		    recoil := 8.0
 
-		if (dist < radius) {
-		    factor := - (1.0 - dist / radius) * recoil
-		    level hero velX += factor * dir x
-		    level hero velY += factor * dir y
+		    if (dist < radius) {
+			factor := - (1.0 - dist / radius) * recoil
+			level hero velX += factor * dir x
+			level hero velY += factor * dir y
+		    }
+		} else {
+		    level play("plop")
 		}
+
 		_destroy()
 		break
 	    }
