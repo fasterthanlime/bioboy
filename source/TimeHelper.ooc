@@ -6,6 +6,10 @@ TimeHelper: class {
     MILLIS_IN_TENTHS := static 10
 
     format: static func (millis: Long) -> String {
+	if (millis == -1) {
+	    return "Unknown"
+	}
+
 	// Look, I'm not always proud of my code, okay?
 	rest := millis
 

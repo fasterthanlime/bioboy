@@ -3,7 +3,7 @@ import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
 import io/[FileReader, File]
 import structs/ArrayList
 
-import Block, Hero, Power
+import Block, Hero, Power, TimeHelper
 
 Medal: enum {
     NONE
@@ -17,6 +17,10 @@ Item: class {
     name: String
     file: String
     medal := Medal NONE
+
+    silverTime := 1000000 as Long
+    goldTime := 1000000 as Long
+    recordTime := -1 as Long
 
     init: func (=name) {
     }
@@ -93,13 +97,19 @@ LevelSelect: class extends Actor {
     side := 60
     padding := 25
 
-    paddingLeft := 300
-    paddingTop := 100
+    paddingLeft := 40
+    paddingTop := 60
+
+    gridPaddingLeft := 350
+    gridPaddingTop := 180
 
     selector: RectSprite
     rowLabel: LabelSprite
     nameLabel: LabelSprite
     pointsLabel: LabelSprite
+    silverLabel: LabelSprite
+    goldLabel: LabelSprite
+    recordLabel: LabelSprite
 
     points := 0
 
@@ -182,10 +192,15 @@ LevelSelect: class extends Actor {
 	selector pos set!(toScreen(colNum, rowNum))
 	rowLabel setText("%s" format(row name))
 	nameLabel setText("%s" format(item name))
+	silverLabel setText(TimeHelper format(item silverTime))
+	goldLabel setText(TimeHelper format(item goldTime))
+	recordLabel setText(TimeHelper format(item recordTime))
     }
 
     success: func {
-	item medal = Medal BRONZE
+	if (item medal < Medal BRONZE) {
+	    item medal = Medal BRONZE
+	}
     }
 
     enter: func {
@@ -204,13 +219,20 @@ LevelSelect: class extends Actor {
     }
 
     toScreen: func (i, j: Int) -> Vec2 {
-	x := paddingLeft + i * (side + padding)
-	y := paddingTop + j * (side + padding)
+	x := gridPaddingLeft + i * (side + padding)
+	y := gridPaddingTop + j * (side + padding)
 	vec2(x, y)
     }
 
     buildUI: func {
 	plan = Plan new("plan")
+
+	// panels
+	leftPanel := RectSprite new(vec2(150, 400))
+	leftPanel size set!(260, 800)
+	leftPanel color set!(1, 1, 1)
+	leftPanel alpha = 0.4
+	pass addSprite(leftPanel)
 
 	selector = RectSprite new(toScreen(0, 0))
 	selector size set!(side + 5, side + 5)
@@ -219,15 +241,45 @@ LevelSelect: class extends Actor {
 	selector color set!(1.0, 1.0, 1.0)
 	pass addSprite(selector)
 
-	rowLabel = LabelSprite new(vec2(50, paddingTop), "<World name>")
+	rowLabel = LabelSprite new(vec2(gridPaddingLeft - 30, 100), "<World name>")
+	rowLabel fontSize = 62.0
 	rowLabel color set!(1.0, 1.0, 0.4)
 	pass addSprite(rowLabel)
 
-	nameLabel = LabelSprite new(vec2(50, 30 + paddingTop), "<Level name>")
+	nameLabel = LabelSprite new(vec2(paddingLeft, 30 + paddingTop), "<Level name>")
+	nameLabel fontSize = 32.0
 	nameLabel color set!(1.0, 1.0, 1.0)
 	pass addSprite(nameLabel)
 
-	pointsLabel = LabelSprite new(vec2(50, 700), "%d" format(points))
+	// ===== spacer ======
+
+	bestLabel := LabelSprite new(vec2(paddingLeft, 90 + paddingTop), "Your time")
+	bestLabel color set!(0.5, 0.5, 0.5)
+	pass addSprite(bestLabel)
+
+	recordLabel = LabelSprite new(vec2(paddingLeft, 120 + paddingTop), "")
+	recordLabel color set!(1.0, 1.0, 1.0)
+	pass addSprite(recordLabel)
+
+	// ===== spacer ======
+
+	timesLabel := LabelSprite new(vec2(paddingLeft, 180 + paddingTop), "Medal times")
+	timesLabel color set!(0.5, 0.5, 0.5)
+	pass addSprite(timesLabel)
+
+	silverLabel = LabelSprite new(vec2(paddingLeft, 210 + paddingTop), "")
+	silverLabel color set!(0.7, 0.7, 0.8)
+	pass addSprite(silverLabel)
+
+	goldLabel = LabelSprite new(vec2(paddingLeft, 240 + paddingTop), "")
+	goldLabel color set!(0.7, 0.7, 0.2)
+	pass addSprite(goldLabel)
+
+	yourPoints := LabelSprite new(vec2(paddingLeft, 670), "Points")
+	yourPoints color set!(0.7, 0.7, 0.7)
+	pass addSprite(yourPoints)
+
+	pointsLabel = LabelSprite new(vec2(paddingLeft, 700), "%d" format(points))
 	pointsLabel color set!(1.0, 1.0, 1.0)
 	pass addSprite(pointsLabel)
 
