@@ -105,8 +105,8 @@ Block: class extends Actor {
 	    }
 
 	    if (countdown == 0) {
-		Explosion new(engine, level objectPass, pos, "boom")
-		level play("fire")
+		Explosion new(engine, level objectPass, pos add(sprite width / 2, sprite height / 2), "boom")
+		level play("prouf")
 		_destroy()
 	    }
 	}
