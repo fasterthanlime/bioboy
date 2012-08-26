@@ -256,7 +256,7 @@ LevelSelect: class extends Actor {
 	selector size set!(side + 15, side + 15)
 	selector filled = false
 	selector thickness = 6
-	selector color set!(0.4, 0.0, 0.0)
+	selector color set!(1, 1, 1)
 	fgPass addSprite(selector)
 
 	rowLabel = LabelSprite new(vec2(gridPaddingLeft - 30, 100), "<World name>")

@@ -10,7 +10,7 @@ Explosion: class extends Actor {
     sprite: ImageSprite
 
     counter := 0
-    maxCounter := 15
+    maxCounter := 10
 
     init: func (=engine, =pass, pos: Vec2, image: String) {
 	sprite = ImageSprite new(pos, "assets/png/%s.png" format(image))
@@ -24,9 +24,9 @@ Explosion: class extends Actor {
     update: func (delta: Float) {
 	counter += 1
 
-	sprite alpha = 0.3 + ((maxCounter - counter) / (1.0 * maxCounter) * 0.7)
+	sprite alpha = 0.8 + ((maxCounter - counter) / (1.0 * maxCounter) * 0.2)
 
-	scale := 0.3 + (counter) / (1.0 * maxCounter) * 0.7
+	scale := 0.3 + (counter) / (1.0 * maxCounter) * 1
 	sprite scale set!(scale, scale)
 	sprite center!()
 
@@ -59,7 +59,7 @@ DamageLabel: class extends Actor {
     init: func (=engine, =pass, pos: Vec2, damage: Int) {
 	sprite = LabelSprite new(pos, "- %d" format(damage))
 	sprite fontSize = 30.0
-	sprite color set!(0.8, 0.0, 0.0)
+	sprite color set!(1.0, 1.0, 1.0)
 
 	engine add(this)
 	pass addSprite(sprite)

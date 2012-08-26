@@ -59,19 +59,30 @@ Level: class extends Actor {
     }
 
     initBg: func {
-	fog := ImageSprite new(vec2(0, 0), "assets/png/fog.png")
+	fog := ImageSprite new(vec2(0, 0), "assets/png/green-fog.png")
 	bgPass addSprite(fog)
     }
 
     initHud: func {
-	timeLabel = LabelSprite new(vec2(40, 50), "")
+	timePanel := ImageSprite new(vec2(120, 60), "assets/png/time-support.png")
+	timePanel center!()
+	timePanel alpha = 0.9
+	hudPass addSprite(timePanel)
+
+	timeLabel = LabelSprite new(vec2(60, 75), "")
 	timeLabel fontSize = 40.0
-	timeLabel color set!(1.0, 1.0, 1.0)
+	timeLabel color set!(0.9, 0.9, 0.9)
 	hudPass addSprite(timeLabel)
 
-	lifeLabel = LabelSprite new(vec2(900, 50), "")
+	lifePanel := ImageSprite new(vec2(920, 50), "assets/png/time-support.png")
+	lifePanel center!()
+	lifePanel alpha = 0.9
+	hudPass addSprite(lifePanel)
+
+	lifeLabel = LabelSprite new(vec2(920, 50), "")
 	lifeLabel fontSize = 40.0
-	lifeLabel color set!(1.0, 1.0, 1.0)
+	lifeLabel centered = true
+	lifeLabel color set!(0.9, 0.9, 0.9)
 	hudPass addSprite(lifeLabel)
 
 	dgunLabel = LabelSprite new(vec2(20, 730), "DGUN (F1)")
