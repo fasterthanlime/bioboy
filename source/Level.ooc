@@ -41,6 +41,11 @@ Level: class extends Actor {
 	ui input onKeyPress(Keys BACKSPACE, ||
 	    loadLevel()
 	)
+
+	ui input onKeyPress(Keys ESC, ||
+	    clear()
+	    onDone(false)
+	)
     }
 
     initPasses: func {
