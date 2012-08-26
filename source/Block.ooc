@@ -21,7 +21,7 @@ Block: class extends Actor {
     inert := false
     solid := false
 
-    speed := 6.0
+    speed := 3.0
 
     sprite: ImageSprite
 
@@ -102,7 +102,7 @@ Block: class extends Actor {
     }
 
     applyThrust: func {
-	factor := 1.2
+	factor := 1.11
 
 	match true {
 	    case (dir x > 0.1) =>

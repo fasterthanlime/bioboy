@@ -10,11 +10,12 @@ Hero: class extends Actor {
     ui: UI
     input: Proxy
 
+    oldPos := vec2(0, 0)
     pos: Vec2
-    velX := 0
-    velY := 0
+    velX := 0.0
+    velY := 0.0
 
-    loseSounds := ["you-suck", "woops", "wth-was-that", "aah", "fuck-that", "dont-think-so", "try-again", "too-bad", "aah", "fuck-that"] as ArrayList<String>
+    loseSounds := ["woops", "wth-was-that", "aah", "dont-think-so", "try-again", "too-bad"] as ArrayList<String>
     winSounds := ["victoly", "yay", "wohow"] as ArrayList<String>
 
     offset := vec2(2, -25)
@@ -70,17 +71,18 @@ Hero: class extends Actor {
     }
 
     update: func (delta: Float) {
+	oldPos set!(pos)
 	pos add!(velX, velY)
 
 	handleCollisions()
 
-	velY += 3
-	if (velY > 12) {
-	    velY = 12
+	velY += 1.5
+	if (velY > 8) {
+	    velY = 8
 	}
 
-	if (velX > 12) {
-	    velX = 12
+	if (velX > 8.0) {
+	    velX = 8.0
 	}
 
 	if (pos x < 0 ||
@@ -88,6 +90,11 @@ Hero: class extends Actor {
 	    pos x > ui display width ||
 	    pos y > ui display height) {
 	    die()
+	}
+
+	posDiff := pos sub(oldPos)
+	if (posDiff norm() <= 0.1) {
+	    velX = 0
 	}
     }
 
@@ -154,9 +161,10 @@ Hero: class extends Actor {
 	    if (bestXBang) {
 		running = true
 		pos add!(bestXBang dir mul(bestXBang depth))
-		velX = 0
 		if (bestXBlock image == "ice") {
 		    hadCollision = false
+		} else {
+		    velX = 0.0
 		}
 	    }
 	}
