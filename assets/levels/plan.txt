@@ -25,15 +25,15 @@ file: ahead.txt
 
 file: level95.txt
 
-## Lvl 97
-
-file: level97.txt
-
 # Icy kingdom
 
 ## Slide away
 
 file: ice1.txt
+
+## Drill down
+
+file: drill.txt
 
 # Booma park
 
