@@ -103,12 +103,6 @@ Level: class extends Actor {
 	minY := pos y - Block SIDE * 1.5
 	maxY := pos y + Block SIDE * 1.5
 
-	rectSprite := RectSprite new(pos)
-	rectSprite size set!(vec(1,1) mul(Block SIDE * 3))
-	rectSprite offset set!(Block SIDE / 2, Block SIDE / 2)
-	rectSprite alpha = 0.5
-	objectPass addSprite(rectSprite)
-
 	neighbors := ArrayList<Block> new()
 
 	for (block in blocks) {
@@ -119,14 +113,6 @@ Level: class extends Actor {
 		neighbors add(block)
 		has = true
 	    }
-
-	    blockSprite := RectSprite new(block pos)
-	    blockSprite offset set!(Block SIDE / 2, Block SIDE / 2)
-	    blockSprite alpha = 0.5
-	    blockSprite color set!(0, 1, has ? 1 : 0)
-	    blockSprite filled = false
-	    blockSprite size set!(block sprite width, block sprite height)
-	    objectPass addSprite(blockSprite)
 	}
 
 	neighbors each (|n| f(n))
@@ -280,8 +266,6 @@ Level: class extends Actor {
 	engine add(this)
 	pass enabled = true
 	input enabled = true
-
-	"Level has %d blocks" printfln(blocks size)
 	
 	return true
     }
