@@ -21,7 +21,7 @@ TimeHelper: class {
 
 	tenths := (rest - (rest % MILLIS_IN_TENTHS)) / MILLIS_IN_TENTHS
 
-	"%d:%02d:%02d" format(minutes, seconds, tenths)
+	"%d\"%02d'%02d" format(minutes, seconds, tenths)
     }
 
 }

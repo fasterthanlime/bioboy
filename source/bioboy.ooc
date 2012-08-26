@@ -35,6 +35,7 @@ Game: class {
 	logger info("configuration loaded from %s" format(configPath))
 
 	engine := Engine new(config)
+	engine ui mousePass enabled = false
 
 	levelSelect = LevelSelect new(engine, |levelFile|
 	    if(level jumpTo(levelFile)) {

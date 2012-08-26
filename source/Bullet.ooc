@@ -15,7 +15,7 @@ DamageLabel: class extends Actor {
     init: func (=engine, =pass, pos: Vec2, damage: Int) {
 	sprite = LabelSprite new(pos, "- %d" format(damage))
 	sprite fontSize = 30.0
-	sprite color set!(Colors red)
+	sprite color set!(0.8, 0.0, 0.0)
 
 	engine add(this)
 	pass addSprite(sprite)

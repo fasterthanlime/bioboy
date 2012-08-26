@@ -84,7 +84,7 @@ LevelSelect: class extends Actor {
     ui: UI
     input: Input
 
-    pass, gridPass: Pass
+    pass, gridPass, fgPass: Pass
     selector: ImageSprite
 
     colNum := 0
@@ -124,6 +124,9 @@ LevelSelect: class extends Actor {
 
 	gridPass = Pass new(ui, "level-select-grid")
 	pass addPass(gridPass)
+
+	fgPass = Pass new(ui, "level-select-foreground")
+	pass addPass(fgPass)
 
 	setupEvents()
 
@@ -227,23 +230,33 @@ LevelSelect: class extends Actor {
     buildUI: func {
 	plan = Plan new("plan")
 
+	// bg
+	background := ImageSprite new(vec2(0, 0), "assets/png/fog.png")
+	pass addSprite(background)
+
 	// panels
 	leftPanel := RectSprite new(vec2(150, 400))
 	leftPanel size set!(260, 800)
-	leftPanel color set!(1, 1, 1)
-	leftPanel alpha = 0.4
+	leftPanel color set!(0, 0, 0)
+	leftPanel alpha = 0.7
 	pass addSprite(leftPanel)
 
+	topPanel := RectSprite new(vec2(512, 75))
+	topPanel size set!(1024, 90)
+	topPanel color set!(0, 0, 0)
+	topPanel alpha = 0.7
+	pass addSprite(topPanel)
+
 	selector = RectSprite new(toScreen(0, 0))
-	selector size set!(side + 5, side + 5)
+	selector size set!(side + 15, side + 15)
 	selector filled = false
-	selector thickness = 4
-	selector color set!(1.0, 1.0, 1.0)
-	pass addSprite(selector)
+	selector thickness = 6
+	selector color set!(0.4, 0.0, 0.0)
+	fgPass addSprite(selector)
 
 	rowLabel = LabelSprite new(vec2(gridPaddingLeft - 30, 100), "<World name>")
 	rowLabel fontSize = 62.0
-	rowLabel color set!(1.0, 1.0, 0.4)
+	rowLabel color set!(1.0, 1.0, 1.0)
 	pass addSprite(rowLabel)
 
 	nameLabel = LabelSprite new(vec2(paddingLeft, 30 + paddingTop), "<Level name>")
@@ -253,27 +266,35 @@ LevelSelect: class extends Actor {
 
 	// ===== spacer ======
 
-	bestLabel := LabelSprite new(vec2(paddingLeft, 90 + paddingTop), "Your time")
-	bestLabel color set!(0.5, 0.5, 0.5)
+	bestLabel := LabelSprite new(vec2(paddingLeft, 120 + paddingTop), "Your time")
+	bestLabel color set!(1.0, 1.0, 1.0)
 	pass addSprite(bestLabel)
 
-	recordLabel = LabelSprite new(vec2(paddingLeft, 120 + paddingTop), "")
+	recordLabel = LabelSprite new(vec2(paddingLeft, 150 + paddingTop), "")
 	recordLabel color set!(1.0, 1.0, 1.0)
 	pass addSprite(recordLabel)
 
 	// ===== spacer ======
 
-	timesLabel := LabelSprite new(vec2(paddingLeft, 180 + paddingTop), "Medal times")
-	timesLabel color set!(0.5, 0.5, 0.5)
+	timesLabel := LabelSprite new(vec2(paddingLeft, 210 + paddingTop), "Silver time")
+	timesLabel color set!(0.7, 0.7, 0.8)
 	pass addSprite(timesLabel)
 
-	silverLabel = LabelSprite new(vec2(paddingLeft, 210 + paddingTop), "")
+	silverLabel = LabelSprite new(vec2(paddingLeft, 240 + paddingTop), "")
 	silverLabel color set!(0.7, 0.7, 0.8)
 	pass addSprite(silverLabel)
 
-	goldLabel = LabelSprite new(vec2(paddingLeft, 240 + paddingTop), "")
+	// ===== spacer =====
+
+	times2Label := LabelSprite new(vec2(paddingLeft, 300 + paddingTop), "Gold time")
+	times2Label color set!(0.7, 0.7, 0.2)
+	pass addSprite(times2Label)
+
+	goldLabel = LabelSprite new(vec2(paddingLeft, 330 + paddingTop), "")
 	goldLabel color set!(0.7, 0.7, 0.2)
 	pass addSprite(goldLabel)
+
+	// ===== *big* spacer ==== 
 
 	yourPoints := LabelSprite new(vec2(paddingLeft, 670), "Points")
 	yourPoints color set!(0.7, 0.7, 0.7)
@@ -294,6 +315,10 @@ LevelSelect: class extends Actor {
 	    for (i in 0..row items size) {
 		pos := toScreen(i, j)
 		item = row items get(i)
+
+		outline := ImageSprite new(pos, "assets/png/item-outline.png")
+		outline center!()
+		gridPass addSprite(outline)
 
 		// Rubyists, you may start laughing now
 		sprite := match (item medal) {

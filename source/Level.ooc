@@ -64,7 +64,7 @@ Level: class extends Actor {
     }
 
     initHud: func {
-	timeLabel = LabelSprite new(vec2(20, 50), "")
+	timeLabel = LabelSprite new(vec2(40, 50), "")
 	timeLabel fontSize = 40.0
 	timeLabel color set!(1.0, 1.0, 1.0)
 	hudPass addSprite(timeLabel)
