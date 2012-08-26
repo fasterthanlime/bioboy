@@ -1,13 +1,14 @@
 
-import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
+import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass, Colors]
 import io/[FileReader, File]
 import structs/ArrayList
 import deadlogger/Log
 
-import Block, Hero, TimeHelper
+import Block, Hero, TimeHelper, LevelSelect, Power
 
 Level: class extends Actor {
 
+    levelSelect: LevelSelect
     engine: Engine
     blocks := ArrayList<Block> new()
 
@@ -18,17 +19,20 @@ Level: class extends Actor {
     onDone: Func (Bool)
 
     pass, bgPass, objectPass, hudPass: Pass
+    input: Input
 
-    lifeLabel: LabelSprite
-    timeLabel: LabelSprite
+    lifeLabel, timeLabel, dgunLabel, armorLabel,
+    jetpackLabel, bombLabel, blockLabel,
+    slowLabel, hookLabel: LabelSprite
 
     life := 0.0
     millis: Long = 0
 
     logger := static Log getLogger(This name)
 
-    init: func (=engine, =onDone) {
+    init: func (=engine, =levelSelect, =onDone) {
 	ui = engine ui
+	input = ui input sub()
 
 	initPasses()
 	initBg()
@@ -69,15 +73,26 @@ Level: class extends Actor {
 	lifeLabel fontSize = 40.0
 	lifeLabel color set!(1.0, 1.0, 1.0)
 	hudPass addSprite(lifeLabel)
+
+	dgunLabel = LabelSprite new(vec2(20, 730), "DGUN (F1)")
+	hudPass addSprite(dgunLabel)
+
+	armorLabel = LabelSprite new(vec2(120, 730), "ARMOR (F2)")
+	hudPass addSprite(armorLabel)
     }
 
     updateHud: func {
 	lifeLabel setText("%.0f%%" format(life))
 	timeLabel setText(TimeHelper format(millis))
+
+	dgunLabel color set!(hero hasPower(Power DGUN) ? Colors red : Colors grey)
+	armorLabel color set!(hero hasPower(Power ARMOR) ? Colors red : Colors grey)
     }
 
     update: func (delta: Float) {
-	millis += delta as Long
+	factor := engine slomo ? 0.5 : 1.0
+
+	millis += (delta * factor) as Long
 	updateHud()
 
 	for(block in blocks) {
@@ -89,6 +104,7 @@ Level: class extends Actor {
 
     clear: func {
 	pass enabled = false
+	input enabled = false
 	engine remove(this)
 
 	if (hero) {
@@ -206,6 +222,7 @@ Level: class extends Actor {
 	
 	engine add(this)
 	pass enabled = true
+	input enabled = true
 	
 	return true
     }
