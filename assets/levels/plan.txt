@@ -5,57 +5,53 @@
 
 file: threeblocks.txt
 
-## Jaws
+## Big Jaws
 
 file: jaws.txt
 
-## Squishy boy
+## Little Jaws
 
 file: fit-rack.txt
 
-## The gap
+## Think diagonals
 
 file: the-gap.txt
 
-## Planning ahead
+## Who needs blocks?
 
 file: ahead.txt
 
-## Lvl 95
+## Dangerous elevator
 
 file: level95.txt
 
 # Icy kingdom
 
-## Slide away
+## Hibernatus
 
 file: ice1.txt
 
-## Ice wall
+## S & M
 
 file: ice2.txt
 
-## Go fast
+## Gold digger
 
 file: ice4.txt
 
-## Drill down
+## Expanding the toolset
 
 file: drill.txt
 
 # Booma park
 
-## No sweat
-
-file: booma1.txt
-
-## No really
-
-file: booma2.txt
-
-## Testing your reflexes
+## Collateral damage
 
 file: booma3.txt
+
+## Time Warner
+
+file: booma2.txt
 
 ## Timing
 
@@ -69,15 +65,7 @@ file: spike1.txt
 
 # Black valley
 
-## Hell on earth
-
-file: valley1.txt
-
-## No time to rest
-
-file: valley2.txt
-
-## Level 99
+## Hitler did nothing right
 
 file: level99.txt
 
