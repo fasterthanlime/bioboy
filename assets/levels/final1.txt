@@ -1,22 +1,24 @@
-
-          d
-   =======j========
-
-
-           
-
-
-           
-
-
-           
-
-
-           
-
-
-           
-
-
-          j
-          a
+================================
+==         x     x             =
+==         x  d xx             =
+==         x  j  x             =
+==         x     x             =
+==         x      x            =
+==         x      x            =
+=x         xxxx   x            =
+=x                x            =
+=x   xx           x            =
+=x   ===         x             =
+=x    = z      -x              =
+=x    =  zzzzzz                =
+=xx    x==                     =
+=      x==                     =
+=      x==                     =
+=      x    -------z           =
+=    xx     =                  =
+=           =             jjjja=
+=           =           jjxxxx==
+=----------^           jxxxxxx==
+=jjjjjjjjjjjjjjjjjjjjjjjxxxxxx==
+=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx==
+================================
