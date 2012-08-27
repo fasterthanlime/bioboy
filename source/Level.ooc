@@ -147,6 +147,9 @@ Level: class extends Actor {
 	while (iter hasNext?()) {
 	    actor := iter next()
 	    if (actor == this) continue
+	    if (actor class name == "Game") continue
+	    if (actor class name == "Menu") continue
+	    if (actor class name == "LevelSelect") continue
 
 	    actor destroy()
 	    iter remove()

@@ -2,22 +2,25 @@
 use zombieconfig, ldkit, deadlogger
 
 import zombieconfig
-import ldkit/[Engine, Dead, Math, Sprites, UI]
+import ldkit/[Engine, Dead, Math, Sprites, UI, Actor]
 import deadlogger/Logger
 import structs/ArrayList
 
-import Level, Story, Menu, LevelSelect
+import Level, Story, Menu, LevelSelect, Instructions
 
 main: func (args: ArrayList<String>) {
     Game new()
 }
 
-Game: class {
+Game: class extends Actor {
 
     levelSelect: LevelSelect
     level: Level
     story: Story
     menu: Menu
+    instructions: Instructions
+
+    shouldSelectLevels := false
 
     init: func {
 
@@ -40,6 +43,16 @@ Game: class {
 	engine ui mousePass enabled = false
 	engine ui escQuits = false
 
+	menu = Menu new(engine, ||
+	    scheduleLevelSelect()
+	, ||
+	    instructions enter()
+	)
+
+	instructions = Instructions new(engine, ||
+	    menu enter()
+	)
+
 	levelSelect = LevelSelect new(engine, |levelFile|
 	    if(level jumpTo(levelFile)) {
 		levelSelect clear()
@@ -50,24 +63,34 @@ Game: class {
 	)
 
 	level = Level new(engine, levelSelect, |success|
+	    level clear()
 	    if (success) {
 		levelSelect success(level millis)
 	    }
 	    levelSelect	updateSelector(success ? 1 : 0, 0)
 	    levelSelect enter()
 	)
-
-	menu = Menu new(engine, ||
-	    levelSelect enter()
-	)
+	level clear()
 
 	story = Story new(engine, "intro", ||
 	    menu enter()
 	)
 	story loadCard()
 
+	engine add(this)
 	engine run()
 
+    }
+
+    scheduleLevelSelect: func {
+	shouldSelectLevels = true
+    }
+
+    update: func (delta: Float) {
+	if(shouldSelectLevels) {
+	    shouldSelectLevels = false
+	    levelSelect enter()
+	}
     }
 
 }

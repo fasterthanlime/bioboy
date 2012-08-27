@@ -23,8 +23,9 @@ Menu: class extends Actor {
     currentPos := 0
 
     onPlay: Func
+    onInstructions: Func
 
-    init: func (=engine, =onPlay) {
+    init: func (=engine, =onPlay, =onInstructions) {
 	ui = engine ui
 	input = ui input sub()
 
@@ -51,6 +52,7 @@ Menu: class extends Actor {
 	)
 
 	input onKeyPress(Keys ENTER, ||
+	    clear()
 	    takeAction()
 	)
 
@@ -68,7 +70,7 @@ Menu: class extends Actor {
 	    case 0 =>
 		onPlay()
 	    case 1 =>
-		// nothing yet
+		onInstructions()
 	    case 2 =>
 		engine quit()
 	}

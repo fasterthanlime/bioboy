@@ -175,11 +175,6 @@ Block: class extends Actor {
 				dead = true	
 			    }
 			}
-
-			if (playCount <= 0) {
-			    level play("boom")
-			    playCount = 15
-			}
 		    }
 		}
 	    }
