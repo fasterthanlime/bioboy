@@ -1,0 +1,25 @@
+                    
+                =   
+=               =   
+=********       =   
+=               =
+=           <   =    
+=  *=*=======   
+=           =
+=>          =
+======*==*  =
+=           =
+=           =     bbbbbbb
+= **********=     b     b
+=           =     b bbb b
+=           =     b b b b
+ *********  =d    b b b b
+            =^    b b b b  
+a           =^====b b b b
+b============       b b b 
+b                   b b b
+bbbbbbbbbbbbbbbbbbbbb b b
+                      b b
+bbbbbbbbbbbbbbbbbbbbbbb b 
+b                       b 
+bbbbbbbbbbbbbbbbbbbbbbbbb
