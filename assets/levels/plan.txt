@@ -79,7 +79,15 @@ file: booma6.txt
 
 # Black valley
 
-## Free fall
+## Slomo, mofo.
 
 file: final1.txt
+
+## Deadly elevator
+
+file: final2.txt
+
+## Caterpillar dream
+
+file: final3.txt
 
