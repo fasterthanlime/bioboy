@@ -35,13 +35,21 @@ file: ice1.txt
 
 file: ice2.txt
 
-## Gold digger
+## Surgical intervention
 
-file: ice4.txt
+file: ice5.txt
 
 ## Expanding the toolset
 
 file: drill.txt
+
+## Gold digger
+
+file: ice4.txt
+
+## Ca-re-fu-lly
+
+file: ice6.txt
 
 # Booma park
 
@@ -57,21 +65,13 @@ file: booma2.txt
 
 file: booma4.txt
 
+## Hitler did nothing right
+
+file: level99.txt
+
 # Spike land
 
 ## Friendly.. not?
 
 file: spike1.txt
-
-# Black valley
-
-## Hitler did nothing right
-
-file: level99.txt
-
-# Final countdown
-
-## Huhuhu
-
-file: final1.txt
 
