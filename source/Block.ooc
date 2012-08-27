@@ -16,6 +16,7 @@ Block: class extends Actor {
     dead := false
     destructible := true
     permeable := false
+    slippery := false
 
     box: Box
     dir := vec2(0, 0)
@@ -57,6 +58,10 @@ Block: class extends Actor {
 
 	if (image == "net") {
 	    permeable = true
+	}
+
+	if (image == "ice" || image == "net") {
+	    slippery = true
 	}
     }
 
@@ -150,7 +155,7 @@ Block: class extends Actor {
 		if (block == this) continue
 		bang := box collide(block box)
 		if (bang) {
-		    if (block inert || block dir squaredNorm() < 0.1) {
+		    if ((block inert || block dir squaredNorm() < 0.1) && (block image != "net")) {
 			dir1 := dir
 			dir2 := block orientation()
 			dot := dir1 dot(dir2)

@@ -111,11 +111,13 @@ Hero: class extends Actor {
 	    pos y < 0 ||
 	    pos x > ui display width ||
 	    pos y > ui display height) {
+	    level play("noo")
 	    ui flash("You got lost in the abyss...")
 	    die()
 	}
 	
 	if (level life <= 0.0) {
+	    level play("too-bad")
 	    ui flash("Murdered by your own weapon!")
 	    die()
 	}
@@ -139,6 +141,7 @@ Hero: class extends Actor {
 	    counter += 1
 	    if (counter > 16) {
 		ui flash("Squashed like a bug!")
+		level play("woops")
 		die()
 		break
 	    }
@@ -181,11 +184,11 @@ Hero: class extends Actor {
 		    }
 
 		    if (block image == "level-end") {
-			level play(Random choice(winSounds))
 			level nextLevel()
 		    }
 
 		    if (block image == "bump") {
+			level play("boing")
 			velY = -20
 		    }
 		}
@@ -194,14 +197,14 @@ Hero: class extends Actor {
 	    if (bestYBang) {
 		running = true
 		pos add!(bestYBang dir mul(bestYBang depth))
-		if (bestYBlock image != "ice") {
+		if (!bestYBlock slippery) {
 		    hadCollision = true
 		}
 	    }
 	    if (bestXBang) {
 		running = true
 		pos add!(bestXBang dir mul(bestXBang depth))
-		if (bestXBlock image == "ice") {
+		if (bestXBlock slippery) {
 		    hadCollision = false
 		} else {
 		    velX = 0.0
@@ -219,7 +222,6 @@ Hero: class extends Actor {
     }
 
     die: func {
-	level play(Random choice(loseSounds))
 	level loadLevel()
     }
 
