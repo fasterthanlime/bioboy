@@ -17,7 +17,7 @@
 bbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbb  
 b    ====       b                      
 b         xbx   b
-b  a      === = b               
+b  a      ===<= b               
 b  ============ b                        
 b               b              
 bbbbbbbbbbbbbbbbb            
