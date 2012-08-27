@@ -84,12 +84,18 @@ file: booma6.txt
 ## Slomo, mofo.
 
 file: final1.txt
+silver: 0"04'10
+gold: 0"02'68
 
 ## Deadly elevator
 
 file: final2.txt
+silver: 0"04'28
+gold: 0"02'62
 
 ## Caterpillar dream
 
 file: final3.txt
+silver: 0"04'49
+gold: 0"04'20
 
