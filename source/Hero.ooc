@@ -174,6 +174,10 @@ Hero: class extends Actor {
 			if (bang dir y < 0) {
 			    velY = 0
 			}
+
+			if (block image == "spike") {
+			    die()
+			}
 		    }
 
 		    if (block image == "level-end") {
@@ -182,7 +186,7 @@ Hero: class extends Actor {
 		    }
 
 		    if (block image == "bump") {
-			velY = -24
+			velY = -20
 		    }
 		}
 	    }

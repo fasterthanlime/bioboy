@@ -249,6 +249,12 @@ Level: class extends Actor {
 		case 'z' =>
 		    createBlock(x, y, "bump")
 
+		case 'x' =>
+		    createBlock(x, y, "spike")
+
+		case 'j' =>
+		    createBlock(x, y, "blink")
+
 		case '=' =>
 		    createBlock(x, y, "inert")
 		case 'a' =>

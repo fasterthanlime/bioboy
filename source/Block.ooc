@@ -26,6 +26,7 @@ Block: class extends Actor {
 
     // only relevant for bomb (pretty code o/)
     countdown := -1
+    blinkCount := 0
 
     speed := 3.0
 
@@ -108,6 +109,15 @@ Block: class extends Actor {
 
 	if (playCount > 0) {
 	    playCount -= 1
+	}
+
+	if (image == "blink") {
+	    blinkCount += 1
+	    if (blinkCount >= 50) {
+		solid = !solid
+		sprite alpha = (solid ? 1.0 : 0.2)
+		blinkCount = 0
+	    }
 	}
 
 	if (countdown >= 0) {
