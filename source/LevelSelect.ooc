@@ -201,8 +201,8 @@ LevelSelect: class extends Actor {
 	item = row items get(colNum)
 
 	selector pos set!(toScreen(colNum, rowNum))
-	rowLabel setText("%s" format(row name))
-	nameLabel setText("%s" format(item name))
+	rowLabel setText("%s" format(item name))
+	nameLabel setText("%s" format(row name))
 	silverLabel setText(TimeHelper format(item silverTime))
 	goldLabel setText(TimeHelper format(item goldTime))
 	recordLabel setText(TimeHelper format(item recordTime))

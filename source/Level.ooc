@@ -166,6 +166,7 @@ Level: class extends Actor {
 
     nextLevel: func {
 	clear()
+	play("tiling")	
 	onDone(true)
     }
 
