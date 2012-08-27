@@ -10,6 +10,15 @@ Medal: enum {
     BRONZE
     SILVER
     GOLD
+
+    val: func -> Int {
+	match this {
+	    case This NONE => 0
+	    case This BRONZE => 1
+	    case This SILVER => 2
+	    case This GOLD => 3
+	}
+    }
 }
 
 Item: class {
@@ -23,6 +32,16 @@ Item: class {
     recordTime := -1 as Long
 
     init: func (=name) {
+    }
+
+    medal: func (millis: Long) -> Medal {
+	if (millis < goldTime) {
+	    Medal GOLD
+	} else if (millis < silverTime) {
+	    Medal SILVER
+	} else {
+	    Medal BRONZE
+	}
     }
 
 }
@@ -216,12 +235,17 @@ LevelSelect: class extends Actor {
 	silverLabel setText(TimeHelper format(item silverTime))
 	goldLabel setText(TimeHelper format(item goldTime))
 	recordLabel setText(TimeHelper format(item recordTime))
+	pointsLabel setText("%d" format(points))
     }
 
     success: func (millis: Long) {
-	if (item medal < Medal BRONZE) {
-	    item medal = Medal BRONZE
+	medal := item medal(millis)
+
+	if (item medal < medal) {
+	    points += (medal val() - item medal val()) * 10
+	    item medal = medal
 	}
+
 	if (item recordTime == -1 || millis < item recordTime) {
 	    item recordTime = millis
 	    ui flash("New record: %s for %s!" format(TimeHelper format(millis), item name))
