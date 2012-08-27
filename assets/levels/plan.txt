@@ -4,6 +4,8 @@
 ## Ground zero
 
 file: threeblocks.txt
+silver: 0"02'54
+gold: 0"01'40
 
 ## Big Jaws
 

@@ -18,8 +18,8 @@ Item: class {
     file: String
     medal := Medal NONE
 
-    silverTime := 1000000 as Long
-    goldTime := 1000000 as Long
+    silverTime := -1 as Long
+    goldTime := -1 as Long
     recordTime := -1 as Long
 
     init: func (=name) {
@@ -61,6 +61,16 @@ Plan: class {
 
 	    if (line startsWith?("file: ")) {
 		item file = line substring(6)
+	    }
+
+	    if (line startsWith?("silver: ")) {
+		time := line substring(8)
+		item silverTime = TimeHelper parse(time)
+	    }
+
+	    if (line startsWith?("gold: ")) {
+		time := line substring(6)
+		item goldTime = TimeHelper parse(time)
 	    }
 	}
 
