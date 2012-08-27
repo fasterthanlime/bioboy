@@ -21,9 +21,7 @@ Level: class extends Actor {
     pass, bgPass, objectPass, hudPass: Pass
     input: Input
 
-    lifeLabel, timeLabel, dgunLabel, armorLabel,
-    jetpackLabel, bombLabel, blockLabel,
-    slowLabel, hookLabel: LabelSprite
+    lifeLabel, timeLabel: LabelSprite
 
     life := 0.0
     millis: Long = 0
@@ -89,12 +87,6 @@ Level: class extends Actor {
 	lifeLabel centered = true
 	lifeLabel color set!(0.9, 0.9, 0.9)
 	hudPass addSprite(lifeLabel)
-
-	dgunLabel = LabelSprite new(vec2(20, 730), "DGUN (F1)")
-	hudPass addSprite(dgunLabel)
-
-	armorLabel = LabelSprite new(vec2(120, 730), "ARMOR (F2)")
-	hudPass addSprite(armorLabel)
     }
 
     eachNeighbor: func (pos: Vec2, f: Func (Block)) {
@@ -121,9 +113,6 @@ Level: class extends Actor {
     updateHud: func {
 	lifeLabel setText("%.0f%%" format(life))
 	timeLabel setText(TimeHelper format(millis))
-
-	dgunLabel color set!(hero hasPower(Power DGUN) ? Colors red : Colors grey)
-	armorLabel color set!(hero hasPower(Power ARMOR) ? Colors red : Colors grey)
     }
 
     update: func (delta: Float) {
