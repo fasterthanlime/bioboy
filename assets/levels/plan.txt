@@ -35,6 +35,10 @@ file: ice1.txt
 
 file: ice2.txt
 
+## Go fast
+
+file: ice4.txt
+
 ## Drill down
 
 file: drill.txt
