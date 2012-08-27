@@ -1,0 +1,24 @@
+================================
+=u=                =====x=======
+= =               ==xxxxx      =
+= = d             =xxxxxx      =
+= ------------    =xxxxxx      =
+= xx              =xxxxxx   x  =
+=>  bb          ---xxxxxx   x  =
+= xx  --------  ======xxx   xx =
+= xx            =    =xxx   xx =
+= xx                 =xxx   xx =
+=>  bb               ====  =x  =
+= xx  -------------     =  ==  =
+= xx                       ==  =
+=>  bb                     ==  =
+= xx  ----------------     x= z=
+=>  bb       xxxxxxxx=     x=  =
+= xx          xxxxxxx=     xx  =
+= xx           xxxxxx=     =x  =
+=>  bb            xxx=     =   =
+= xx                 =    ^    =
+= xx                  ----     =
+=>  bb                         =
+=>             a             z =
+=------------------------------=

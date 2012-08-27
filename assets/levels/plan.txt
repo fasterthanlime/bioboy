@@ -61,6 +61,10 @@ file: booma3.txt
 
 file: booma2.txt
 
+## Around and again
+
+file: booma5.txt
+
 ## Timing
 
 file: booma4.txt
@@ -68,6 +72,10 @@ file: booma4.txt
 ## Hitler did nothing right
 
 file: level99.txt
+
+## Garbage
+
+file: booma6.txt
 
 # Spike land
 

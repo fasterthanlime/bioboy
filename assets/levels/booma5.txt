@@ -1,0 +1,25 @@
+================================
+=                              =
+=                              =
+=                          d   =
+=            ------------------=
+=               ========--======
+=               xxxxxxxxbb     =
+=               xbbbbbbbbb     =
+=               xxxxxxxxxx     =
+=--------------                =
+=======--======xx              =
+=  xbbbbbbbbbbx  xx            =
+=   xxxbbxxxxx     xx          =
+=     xbbx          x          =
+=      xx           x          =
+=  -------------               =
+=            ==                =
+=  bbbbbbbbx ==                =
+=  b========a===^--------------=
+=  b--------=============b======
+=  b=====================b======
+== bbbbbbbbbbbbbbbbbbbbbbbbbbb==
+================================
+=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=
+=                              =
