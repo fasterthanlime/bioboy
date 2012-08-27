@@ -19,6 +19,15 @@ Medal: enum {
 	    case This GOLD => 3
 	}
     }
+
+    toString: func -> String {
+	match this {
+	    case This NONE => "none"
+	    case This BRONZE => "bronze"
+	    case This SILVER => "silver"
+	    case This GOLD => "gold"
+	}
+    }
 }
 
 Item: class {
@@ -103,11 +112,7 @@ LevelSelect: class extends Actor {
     // powers
     dgun := false
     armor := false
-    jetpack := false
-    bomb := false
-    block := false
     slow := false
-    hook := false
 
     engine: Engine
     ui: UI
@@ -115,6 +120,12 @@ LevelSelect: class extends Actor {
 
     pass, gridPass, fgPass: Pass
     selector: ImageSprite
+
+    powerDgun, powerArmor, powerTime: ImageSprite
+
+    dgunPoints := 60
+    armorPoints := 120
+    slowPoints := 200
 
     colNum := 0
     rowNum := 0
@@ -166,15 +177,11 @@ LevelSelect: class extends Actor {
 	clear()
     }
 
-    togglePower: func (which: Power) {
+    activatePower: func (which: Power) {
 	match which {
 	    case Power DGUN => dgun = !dgun
 	    case Power ARMOR => armor = !armor
-	    case Power JETPACK => jetpack = !jetpack
-	    case Power BOMB => bomb = !bomb
-	    case Power BLOCK => block = !block
 	    case Power SLOW => slow = !slow
-	    case Power HOOK => hook = !hook
 	}
     }
 
@@ -182,11 +189,7 @@ LevelSelect: class extends Actor {
 	match which {
 	    case Power DGUN => dgun
 	    case Power ARMOR => armor
-	    case Power JETPACK => jetpack
-	    case Power BOMB => bomb
-	    case Power BLOCK => block
 	    case Power SLOW => slow
-	    case Power HOOK => hook
 	    case => false
 	}
     }
@@ -243,12 +246,31 @@ LevelSelect: class extends Actor {
 
 	if (item medal < medal) {
 	    points += (medal val() - item medal val()) * 10
+
+	    unlockItems()
 	    item medal = medal
+	    ui flash("Won %s medal on %s" format(medal toString(), item name))
 	}
 
 	if (item recordTime == -1 || millis < item recordTime) {
 	    item recordTime = millis
-	    ui flash("New record: %s for %s!" format(TimeHelper format(millis), item name))
+	}
+    }
+
+    unlockItems: func {
+	if (points >= dgunPoints) {
+	    dgun = true
+	    powerDgun alpha = 1.0
+	}
+
+	if (points >= armorPoints) {
+	    armor = true
+	    powerArmor alpha = 1.0
+	}
+
+	if (points >= slowPoints) {
+	    slow = true
+	    powerTime alpha = 1.0
 	}
     }
 
@@ -349,6 +371,23 @@ LevelSelect: class extends Actor {
 	pointsLabel = LabelSprite new(vec2(paddingLeft, 700), "%d" format(points))
 	pointsLabel color set!(1.0, 1.0, 1.0)
 	pass addSprite(pointsLabel)
+
+	// powers
+
+	powers := ImageSprite new(vec2(0, 0), "assets/png/powers.png")
+	pass addSprite(powers)
+
+	powerDgun = ImageSprite new(vec2(0, 0), "assets/png/power-dgun.png")
+	powerDgun alpha = 0
+	pass addSprite(powerDgun)
+
+	powerArmor = ImageSprite new(vec2(0, 0), "assets/png/power-armor.png")
+	powerArmor alpha = 0
+	pass addSprite(powerArmor)
+
+	powerTime = ImageSprite new(vec2(0, 0), "assets/png/power-time.png")
+	powerTime alpha = 0
+	pass addSprite(powerTime)
 
 	buildGrid()
     }

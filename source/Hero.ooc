@@ -44,18 +44,6 @@ Hero: class extends Actor {
 	input onKeyPress(Keys RIGHT, || fire())
 	input onKeyPress(Keys UP, || fire())
 	input onKeyPress(Keys DOWN, || fire())
-
-	input onKeyPress(Keys F1, || togglePower(Power DGUN))
-	input onKeyPress(Keys F2, || togglePower(Power ARMOR))
-	input onKeyPress(Keys F3, || togglePower(Power JETPACK))
-	input onKeyPress(Keys F4, || togglePower(Power BOMB))
-	input onKeyPress(Keys F5, || togglePower(Power BLOCK))
-	input onKeyPress(Keys F6, || togglePower(Power SLOW))
-	input onKeyPress(Keys F7, || togglePower(Power HOOK))
-    }
-
-    togglePower: func (which: Power) {
-	level levelSelect togglePower(which)
     }
 
     hasPower: func (which: Power) -> Bool {
@@ -87,7 +75,7 @@ Hero: class extends Actor {
     }
 
     update: func (delta: Float) {
-	if (input isPressed(Keys CTRL)) {
+	if (input isPressed(Keys CTRL) && hasPower(Power SLOW)) {
 	    engine slomo = true
 	} else {
 	    engine slomo = false
