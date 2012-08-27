@@ -246,6 +246,9 @@ Level: class extends Actor {
 		case '-' =>
 		    createBlock(x, y, "net")
 
+		case 'z' =>
+		    createBlock(x, y, "bump")
+
 		case '=' =>
 		    createBlock(x, y, "inert")
 		case 'a' =>

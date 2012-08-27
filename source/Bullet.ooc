@@ -144,7 +144,7 @@ Bullet: class extends Actor {
 
 		    dist := diff norm()
 		    radius := 180.0
-		    recoil := 8.0
+		    recoil := 10.0
 
 		    if (dist < radius) {
 			factor := - (1.0 - dist / radius) * recoil

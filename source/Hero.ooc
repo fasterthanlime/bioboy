@@ -98,9 +98,9 @@ Hero: class extends Actor {
 
 	handleCollisions()
 
-	velY += 1.5
-	if (velY > 8) {
-	    velY = 8
+	velY += 1
+	if (velY > 12) {
+	    velY = 12
 	}
 
 	if (velX > 8.0) {
@@ -179,6 +179,10 @@ Hero: class extends Actor {
 		    if (block image == "level-end") {
 			level play(Random choice(winSounds))
 			level nextLevel()
+		    }
+
+		    if (block image == "bump") {
+			velY = -24
 		    }
 		}
 	    }

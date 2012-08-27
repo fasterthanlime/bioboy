@@ -50,7 +50,7 @@ Block: class extends Actor {
 	    inert = true
 	}
 
-	if (image == "level-end") {
+	if (image == "level-end" || image == "bump") {
 	    solid = false
 	}
 
