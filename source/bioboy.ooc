@@ -14,7 +14,7 @@ main: func (args: ArrayList<String>) {
 
 Game: class extends Actor {
 
-    musics := ["spywillie", "castle", "drama", "valse"] as ArrayList<String>
+    musics := ["drama", "spywillie", "castle"] as ArrayList<String>
     musicSource: Source
     currentMusic := 0
 
@@ -82,7 +82,7 @@ Game: class extends Actor {
 	)
 	story loadCard()
 
-	play(musicPath())
+	play("assets/ogg/music/valse.ogg")
 
 	engine add(this)
 	engine run()
@@ -109,6 +109,15 @@ Game: class extends Actor {
 	if(shouldSelectLevels) {
 	    shouldSelectLevels = false
 	    levelSelect enter()
+	    play(musicPath())
+	}
+
+	if (musicSource && musicSource getState() == SourceState STOPPED) {
+	    currentMusic += 1
+	    if (currentMusic >= musics size) {
+		currentMusic = 0
+	    }
+	    play(musicPath())
 	}
     }
 

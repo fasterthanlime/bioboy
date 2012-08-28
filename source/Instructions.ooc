@@ -17,11 +17,10 @@ Instructions: class extends Actor {
 	pass = Pass new(ui, "instructions") 
 	ui levelPass addPass(pass)
 
-	sprite := ImageSprite new(vec2(0, 0), "assets/png/fog.png")
+	sprite := ImageSprite new(vec2(0, 0), "assets/png/instructions.png")
 	pass addSprite(sprite)
 
 	input onKeyPress(Keys ESC, ||
-	    "Caught esc" println()
 	    clear()
 	    onExit()
 	)
