@@ -3,7 +3,7 @@ import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
 import io/[FileReader, File]
 import structs/ArrayList
 
-import Block, Hero, Power, TimeHelper
+import Block, Hero, Power, TimeHelper, bioboy
 
 Medal: enum {
     NONE
@@ -154,10 +154,9 @@ LevelSelect: class extends Actor {
 
     points := 0
 
-    onPlay: Func (String)
-    onExit: Func
+    game: Game
 
-    init: func (=engine, =onPlay, =onExit) {
+    init: func (=engine, =game) {
 	ui = engine ui
 	input = ui input sub()
 
@@ -206,11 +205,11 @@ LevelSelect: class extends Actor {
 
     leave: func {
 	clear()
-	onExit()
+	game on("return-to-menu")
     }
 
     takeAction: func {
-	onPlay(item file)
+	game on("levelselect-play")
     }
 
     updateSelector: func (deltaCol, deltaRow: Int) {

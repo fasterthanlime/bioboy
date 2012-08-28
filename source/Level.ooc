@@ -4,7 +4,7 @@ import io/[FileReader, File]
 import structs/ArrayList
 import deadlogger/Log
 
-import Block, Hero, TimeHelper, LevelSelect, Power
+import Block, Hero, TimeHelper, LevelSelect, Power, bioboy
 
 Level: class extends Actor {
 
@@ -16,7 +16,6 @@ Level: class extends Actor {
     hero: Hero
 
     levelFile: String
-    onDone: Func (Bool)
 
     pass, bgPass, objectPass, hudPass: Pass
     input: Input
@@ -28,7 +27,9 @@ Level: class extends Actor {
 
     logger := static Log getLogger(This name)
 
-    init: func (=engine, =levelSelect, =onDone) {
+    game: Game
+
+    init: func (=engine, =levelSelect, =game) {
 	ui = engine ui
 	input = ui input sub()
 
@@ -42,7 +43,7 @@ Level: class extends Actor {
 
 	input onKeyPress(Keys ESC, ||
 	    clear()
-	    onDone(false)
+	    game on("level-fail")
 	)
     }
 
@@ -159,7 +160,7 @@ Level: class extends Actor {
     nextLevel: func {
 	clear()
 	play("tiling")	
-	onDone(true)
+	game on("level-success")
     }
 
     play: func (sound: String) {

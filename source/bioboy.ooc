@@ -4,12 +4,20 @@ use zombieconfig, ldkit, deadlogger
 import zombieconfig
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Sound]
 import deadlogger/Logger
-import structs/ArrayList
+import structs/[ArrayList, Stack]
 
 import Level, Story, Menu, LevelSelect, Instructions
 
 main: func (args: ArrayList<String>) {
     Game new()
+}
+
+GameEvent: class {
+
+    name: String
+    
+    init: func (=name) {}
+
 }
 
 Game: class extends Actor {
@@ -25,7 +33,7 @@ Game: class extends Actor {
     engine: Engine
     instructions: Instructions
 
-    shouldSelectLevels := false
+    events := Stack<GameEvent> new()
 
     init: func {
 
@@ -48,44 +56,30 @@ Game: class extends Actor {
 	engine ui mousePass enabled = false
 	engine ui escQuits = false
 
-	menu = Menu new(engine, ||
-	    scheduleLevelSelect()
-	, ||
-	    instructions enter()
-	)
+	menu = Menu new(engine, this) 
 
-	instructions = Instructions new(engine, ||
-	    menu enter()
-	)
+	instructions = Instructions new(engine, this)
 
-	levelSelect = LevelSelect new(engine, |levelFile|
-	    if(level jumpTo(levelFile)) {
-		levelSelect clear()
-	    }
-	, ||
-	    levelSelect clear()
-	    menu enter()
-	)
+	levelSelect = LevelSelect new(engine, this)
 
-	level = Level new(engine, levelSelect, |success|
-	    level clear()
-	    if (success) {
-		levelSelect success(level millis)
-	    }
-	    levelSelect	updateSelector(success ? 1 : 0, 0)
-	    levelSelect enter()
-	)
+	level = Level new(engine, levelSelect, this)
 	level clear()
 
-	story = Story new(engine, "intro", ||
-	    menu enter()
-	)
+	story = Story new(engine, "intro", this)
 	story loadCard()
 
 	play("assets/ogg/music/piano.ogg")
 
 	engine add(this)
 	engine run()
+    }
+
+    notify: func (event: GameEvent) {
+	events push(event)
+    }
+
+    on: func (name: String) {
+	notify(GameEvent new(name))
     }
 
     play: func (path: String) {
@@ -101,23 +95,49 @@ Game: class extends Actor {
 	"assets/ogg/music/%s.ogg" format(musics get(currentMusic))
     }
 
-    scheduleLevelSelect: func {
-	shouldSelectLevels = true
-    }
-
     update: func (delta: Float) {
-	if(shouldSelectLevels) {
-	    shouldSelectLevels = false
-	    levelSelect enter()
-	    play(musicPath())
-	}
-
 	if (musicSource && musicSource getState() == SourceState STOPPED) {
 	    currentMusic += 1
 	    if (currentMusic >= musics size) {
 		currentMusic = 0
 	    }
 	    play(musicPath())
+	}
+
+	while (!events empty?()) {
+	    ev := events pop()
+	    handleEvent(ev)
+	}
+
+    }
+
+    handleEvent: func (ev: GameEvent) {
+	match (ev name) {
+	    case "return-to-menu" =>
+		menu enter()
+
+	    case "menu-play" =>
+		levelSelect enter()
+		play(musicPath())
+	    case "menu-instructions" =>
+		instructions enter()
+
+	    case "levelselect-play" =>
+		if (level jumpTo(levelSelect item file)) {
+		    levelSelect clear()
+		}
+
+	    case "level-success" =>
+		levelSelect success(level millis)
+		levelSelect updateSelector(1, 0)
+		levelSelect enter()
+
+	    case "level-fail" =>
+		levelSelect updateSelector(0, 0)
+		levelSelect enter()
+
+	    case "quit" =>
+		engine quit()
 	}
     }
 

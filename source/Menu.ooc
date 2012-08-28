@@ -3,7 +3,7 @@ import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
 import io/[FileReader, File]
 import structs/ArrayList
 
-import Block, Hero
+import Block, Hero, bioboy
 
 Menu: class extends Actor {
 
@@ -22,10 +22,9 @@ Menu: class extends Actor {
 
     currentPos := 0
 
-    onPlay: Func
-    onInstructions: Func
+    game: Game
 
-    init: func (=engine, =onPlay, =onInstructions) {
+    init: func (=engine, =game) {
 	ui = engine ui
 	input = ui input sub()
 
@@ -88,11 +87,11 @@ Menu: class extends Actor {
 	clear()
 	match currentPos {
 	    case 0 =>
-		onPlay()
+		game on("menu-play")
 	    case 1 =>
-		onInstructions()
+		game on("menu-instructions")
 	    case 2 =>
-		engine quit()
+		game on("quit")
 	}
     }
 

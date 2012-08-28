@@ -1,6 +1,8 @@
 
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
 
+import bioboy
+
 Instructions: class extends Actor {
 
     engine: Engine
@@ -8,9 +10,9 @@ Instructions: class extends Actor {
     input: Input
     pass: Pass
 
-    onExit: Func
+    game: Game
 
-    init: func (=engine, =onExit) {
+    init: func (=engine, =game) {
 	ui = engine ui
 	input = ui input sub()
 
@@ -22,7 +24,7 @@ Instructions: class extends Actor {
 
 	input onKeyPress(Keys ESC, ||
 	    clear()
-	    onExit()
+	    game on("return-to-menu") 
 	)
 
 	clear()

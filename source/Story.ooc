@@ -3,7 +3,7 @@ import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
 import io/[FileReader, File]
 import structs/ArrayList
 
-import Block, Hero
+import Block, Hero, bioboy
 
 StoryCard: class {
     image: String
@@ -25,9 +25,9 @@ Story: class extends Actor {
     cards := ArrayList<StoryCard> new()
     cardNum := 0
 
-    onDone: Func
+    game: Game
 
-    init: func (=engine, =name, =onDone) {
+    init: func (=engine, =name, =game) {
 	ui = engine ui
 	input = ui input sub()
     
@@ -87,7 +87,7 @@ Story: class extends Actor {
 
     leave: func {
 	clear()
-	onDone()
+	game on("return-to-menu")	
     }
 
     loadCard: func {
