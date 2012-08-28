@@ -39,6 +39,26 @@ Menu: class extends Actor {
 	selector offset set!(- selector width * 0.5, - selector height * 0.5)
 	pass addSprite(selector)
 
+	credits := LabelSprite new(vec2(200, 680), "Amos Wenger (everything else)")
+	credits centered = true
+	credits color set!(1, 1, 1)
+	pass addSprite(credits)
+
+	credits = LabelSprite new(vec2(200, 710), "Myriam Bechikh (levels, test)")
+	credits centered = true
+	credits color set!(1, 1, 1)
+	pass addSprite(credits)
+
+	credits = LabelSprite new(vec2(800, 680), "Sylvain Wenger (music)")
+	credits centered = true
+	credits color set!(1, 1, 1)
+	pass addSprite(credits)
+	
+	credits = LabelSprite new(vec2(800, 710), "Romain Ruetschi (test)")
+	credits centered = true
+	credits color set!(1, 1, 1)
+	pass addSprite(credits)
+
 	input onMousePress(1, ||
 	    selector pos _ println()
 	)
