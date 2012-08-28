@@ -2,7 +2,7 @@
 use zombieconfig, ldkit, deadlogger
 
 import zombieconfig
-import ldkit/[Engine, Dead, Math, Sprites, UI, Actor]
+import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Sound]
 import deadlogger/Logger
 import structs/ArrayList
 
@@ -14,10 +14,15 @@ main: func (args: ArrayList<String>) {
 
 Game: class extends Actor {
 
+    musics := ["spywillie", "castle", "drama", "valse"] as ArrayList<String>
+    musicSource: Source
+    currentMusic := 0
+
     levelSelect: LevelSelect
     level: Level
     story: Story
     menu: Menu
+    engine: Engine
     instructions: Instructions
 
     shouldSelectLevels := false
@@ -37,7 +42,7 @@ Game: class extends Actor {
 	)
 	logger info("configuration loaded from %s" format(configPath))
 
-	engine := Engine new(config)
+	engine = Engine new(config)
 	
 	// customize UI a bit
 	engine ui mousePass enabled = false
@@ -77,9 +82,23 @@ Game: class extends Actor {
 	)
 	story loadCard()
 
+	play(musicPath())
+
 	engine add(this)
 	engine run()
+    }
 
+    play: func (path: String) {
+	if (musicSource) {
+	    musicSource free()
+	}
+
+	sample := engine ui boombox load(path)
+	musicSource = engine ui boombox play(sample)
+    }
+
+    musicPath: func -> String {
+	"assets/ogg/music/%s.ogg" format(musics get(currentMusic))
     }
 
     scheduleLevelSelect: func {
