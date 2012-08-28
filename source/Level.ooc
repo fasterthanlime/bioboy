@@ -90,7 +90,7 @@ Level: class extends Actor {
 	hudPass addSprite(lifeLabel)
     }
 
-    eachNeighbor: func (pos: Vec2, f: Func (Block)) {
+    neighbors: func (pos: Vec2, f: Func (Block)) -> List<Block> {
 	minX := pos x - Block SIDE * 1.5
 	maxX := pos x + Block SIDE * 1.5
 	minY := pos y - Block SIDE * 1.5
@@ -108,7 +108,7 @@ Level: class extends Actor {
 	    }
 	}
 
-	neighbors each (|n| f(n))
+	neighbors
     }
 
     updateHud: func {

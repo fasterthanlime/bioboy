@@ -139,9 +139,9 @@ Block: class extends Actor {
 	    if (countdown == 0) {
 		Explosion new(engine, level objectPass, pos add(sprite width / 2, sprite height / 2), "prouf")
 		level play("prouf")
-		level eachNeighbor(pos, |n|
+		for(n in level neighbors(pos)) {
 		    n explodeTouch()
-		)
+		}
 		_destroy()
 	    }
 	}
