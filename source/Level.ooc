@@ -1,7 +1,7 @@
 
 import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass, Colors, Collision]
 import io/[FileReader, File]
-import structs/ArrayList
+import structs/[ArrayList, List]
 import deadlogger/Log
 
 import Block, Hero, TimeHelper, LevelSelect, Power, bioboy
@@ -90,7 +90,7 @@ Level: class extends Actor {
 	hudPass addSprite(lifeLabel)
     }
 
-    neighbors: func (pos: Vec2, f: Func (Block)) -> List<Block> {
+    neighbors: func (pos: Vec2) -> List<Block> {
 	minX := pos x - Block SIDE * 1.5
 	maxX := pos x + Block SIDE * 1.5
 	minY := pos y - Block SIDE * 1.5
