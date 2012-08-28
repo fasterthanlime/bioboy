@@ -14,7 +14,7 @@ main: func (args: ArrayList<String>) {
 
 Game: class extends Actor {
 
-    musics := ["drama", "spywillie", "castle"] as ArrayList<String>
+    musics := ["drama", "spywillie", "castle", "valse"] as ArrayList<String>
     musicSource: Source
     currentMusic := 0
 
@@ -82,7 +82,7 @@ Game: class extends Actor {
 	)
 	story loadCard()
 
-	play("assets/ogg/music/valse.ogg")
+	play("assets/ogg/music/piano.ogg")
 
 	engine add(this)
 	engine run()
