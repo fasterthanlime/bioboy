@@ -10,74 +10,108 @@ gold: 0"01'40
 ## Big Jaws
 
 file: jaws.txt
+silver: 0"08'30
+gold: 0"06'00
 
 ## Little Jaws
 
 file: fit-rack.txt
+silver: 0"08'36
+gold: 0"07'20
 
 ## Think diagonals
 
 file: the-gap.txt
+silver: 0"07'10
+gold: 0"08'00
 
 ## Who needs blocks?
 
 file: ahead.txt
+silver: 0"02'60
+gold: 0"02'30
 
 ## Dangerous elevator
 
 file: level95.txt
+silver: 0"09'20
+gold: 0"02'59
 
 # Icy kingdom
 
 ## Hibernatus
 
 file: ice1.txt
+silver: 0"07'00
+gold: 0"05'30
 
 ## S & M
 
 file: ice2.txt
+silver: 0"09'60
+gold: 0"05'88
 
 ## Surgical intervention
 
 file: ice5.txt
+silver: 0"07'34
+gold: 0"06'40
 
 ## Expanding the toolset
 
 file: drill.txt
+silver: 0"19'00
+gold: 0"17'89
 
 ## Gold digger
 
 file: ice4.txt
+silver: 0"08'00
+gold: 0"07'69
 
 ## Ca-re-fu-lly
 
 file: ice6.txt
+silver: 0"10'12
+gold: 0"05'80
 
 # Booma park
 
 ## Collateral damage
 
 file: booma3.txt
+silver: 0"05'20
+gold: 0"04'80
 
 ## Time Warner
 
 file: booma2.txt
+silver: 0"05'50
+gold: 0"05'00
 
 ## Around and again
 
 file: booma5.txt
+silver: 0"22'00
+gold: 0"17'00
 
 ## Timing
 
 file: booma4.txt
+silver: 0"09'00
+gold: 0"08'00
 
 ## Hitler did nothing right
 
 file: level99.txt
+silver: 0"30'00
+gold: 0"15'00
 
 ## Garbage
 
 file: booma6.txt
+silver: 0"05'84
+gold: 0"05'19
 
 # Black valley
 
