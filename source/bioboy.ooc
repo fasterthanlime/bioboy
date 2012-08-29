@@ -84,10 +84,10 @@ Game: class extends Actor {
 
     play: func (path: String) {
 	if (musicSource) {
-	    musicSource free()
+	    engine ui boombox freeSource(musicSource)
 	}
 
-	sample := engine ui boombox load(path)
+	sample := engine ui boombox load(path, true)
 	musicSource = engine ui boombox play(sample)
     }
 
