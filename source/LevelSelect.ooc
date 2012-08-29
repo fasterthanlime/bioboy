@@ -107,7 +107,7 @@ Plan: class {
 
 }
 
-LevelSelect: class extends Actor {
+LevelSelect: class {
 
     // powers
     dgun := false
@@ -276,7 +276,6 @@ LevelSelect: class extends Actor {
     enter: func {
 	pass enabled = true
 	input enabled = true
-	engine add(this)
 
 	buildGrid()
 	updateSelector(0, 0)
@@ -285,7 +284,6 @@ LevelSelect: class extends Actor {
     clear: func {
 	pass enabled = false
 	input enabled = false
-	engine remove(this)
     }
 
     toScreen: func (i, j: Int) -> Vec2 {
@@ -417,10 +415,6 @@ LevelSelect: class extends Actor {
 		gridPass addSprite(medalSprite)
 	    }
 	}
-    }
-
-    update: func (delta: Float) {
-
     }
 
     destroy: func {

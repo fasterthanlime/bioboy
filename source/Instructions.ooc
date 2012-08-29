@@ -3,7 +3,7 @@ import ldkit/[Engine, Dead, Math, Sprites, UI, Actor, Input, Pass]
 
 import bioboy
 
-Instructions: class extends Actor {
+Instructions: class {
 
     engine: Engine
     ui: UI
@@ -33,16 +33,11 @@ Instructions: class extends Actor {
     clear: func {
 	pass enabled = false
 	input enabled = false
-	engine remove(this)
     }
 
     enter: func {
 	pass enabled = true
 	input enabled = true
-	engine add(this)
-    }
-
-    update: func (delta: Float) {
     }
 
 }

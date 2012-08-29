@@ -12,21 +12,43 @@ Block: class extends Actor {
     image: String
     x, y: Int
 
+    // should stay in the list and updated
+    alive := true
+
+    // permanent back-and-forth
     permanent := false
-    dead := false
+
+    // movement definitely stopped
+    stopped := false
+
+    // can be destroyed by an explosion
     destructible := true
+
+    // can be shot through / a block can move through it
     permeable := false
+
+    // lets the hero slide along it
     slippery := false
 
-    box: Box
-    dir := vec2(0, 0)
-    pos: Vec2
-
+    // inert block, never moves
     inert := false
+
+    // block you can stand on
     solid := true
 
-    // only relevant for bomb (pretty code o/)
+    // for collisions
+    box: Box
+
+    // current movement direction
+    dir := vec2(0, 0)
+
+    // current position
+    pos: Vec2
+
+    // only relevant for bomb
     countdown := -1
+
+    // only relevant for blinks
     blinkCount := 0
 
     speed := 3.0
@@ -103,14 +125,14 @@ Block: class extends Actor {
 		    countdown = 59
 		}
 	    case =>
-		if (!dead) {
+		if (!stopped) {
 		    dir set!(orientation())
 		}
 	}
     }
 
-    update: func (delta: Float) {
-	if (dead) return
+    update: func (delta: Float) -> Bool {
+	if (stopped) return false
 
 	if (playCount > 0) {
 	    playCount -= 1
@@ -172,7 +194,7 @@ Block: class extends Actor {
 			} else {
 			    dir set!(0, 0)
 			    if (block inert) {
-				dead = true	
+				stopped = true	
 			    }
 			}
 		    }
@@ -188,6 +210,8 @@ Block: class extends Actor {
 		kick()
 	    }
 	}
+
+	!alive
     }
 
     applyThrust: func {
@@ -212,7 +236,7 @@ Block: class extends Actor {
     }
 
     _destroy: func {
-	level blocks remove(this)
+	alive = false
 	destroy()
     }
 

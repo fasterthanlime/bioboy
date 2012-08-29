@@ -116,17 +116,24 @@ Level: class extends Actor {
 	timeLabel setText(TimeHelper format(millis))
     }
 
-    update: func (delta: Float) {
+    update: func (delta: Float) -> Bool {
 	factor := engine slomo ? 0.5 : 1.0
 
 	millis += (delta * factor) as Long
 	updateHud()
 
-	for(block in blocks) {
-	    block update(delta)
+	iter := blocks iterator()
+	while (iter hasNext?()) {
+	    block := iter next()
+	    if (block update(delta)) {
+		// returned true = wants to be destroyed
+		iter remove()
+	    }
 	}
 
 	hero update(delta)
+
+	false
     }
 
     clear: func {

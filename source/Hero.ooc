@@ -74,7 +74,7 @@ Hero: class extends Actor {
 	}
     }
 
-    update: func (delta: Float) {
+    update: func (delta: Float) -> Bool {
 	if (input isPressed(Keys CTRL) && hasPower(Power SLOW)) {
 	    engine slomo = true
 	} else {
@@ -118,6 +118,8 @@ Hero: class extends Actor {
 		velX *= 0.7
 	    }
 	}
+
+	false
     }
 
     handleCollisions: func {

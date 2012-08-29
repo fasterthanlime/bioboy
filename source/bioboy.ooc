@@ -95,7 +95,7 @@ Game: class extends Actor {
 	"assets/ogg/music/%s.ogg" format(musics get(currentMusic))
     }
 
-    update: func (delta: Float) {
+    update: func (delta: Float) -> Bool {
 	if (musicSource && musicSource getState() == SourceState STOPPED) {
 	    currentMusic += 1
 	    if (currentMusic >= musics size) {
@@ -109,6 +109,7 @@ Game: class extends Actor {
 	    handleEvent(ev)
 	}
 
+	false
     }
 
     handleEvent: func (ev: GameEvent) {

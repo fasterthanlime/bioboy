@@ -5,7 +5,7 @@ import structs/ArrayList
 
 import Block, Hero, bioboy
 
-Menu: class extends Actor {
+Menu: class {
 
     engine: Engine
     ui: UI
@@ -112,17 +112,11 @@ Menu: class extends Actor {
     enter: func {
 	pass enabled = true
 	input enabled = true
-	engine add(this)
     }
 
     clear: func {
 	pass enabled = false
 	input enabled = false
-	engine remove(this)
-    }
-
-    update: func (delta: Float) {
-
     }
 
 }

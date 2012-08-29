@@ -12,6 +12,8 @@ Explosion: class extends Actor {
     counter := 0
     maxCounter := 10
 
+    alive := true
+
     init: func (=engine, =pass, pos: Vec2, image: String) {
 	sprite = ImageSprite new(pos, "assets/png/%s.png" format(image))
 	sprite center!()
@@ -21,7 +23,7 @@ Explosion: class extends Actor {
 	update(0)
     }
 
-    update: func (delta: Float) {
+    update: func (delta: Float) -> Bool {
 	counter += 1
 
 	sprite alpha = 0.8 + ((maxCounter - counter) / (1.0 * maxCounter) * 0.2)
@@ -33,6 +35,8 @@ Explosion: class extends Actor {
 	if (counter >= maxCounter) {
 	    destroy()
 	}
+
+	!alive
     }
 
     destroy: func {
@@ -41,7 +45,7 @@ Explosion: class extends Actor {
 
     _destroy: func {
 	destroy()
-	engine remove(this)
+	alive = false
     }
 
 }
@@ -56,6 +60,8 @@ DamageLabel: class extends Actor {
     counter := 0
     maxCounter := 100
 
+    alive := true
+
     init: func (=engine, =pass, pos: Vec2, damage: Int) {
 	sprite = LabelSprite new(pos, "- %d" format(damage))
 	sprite fontSize = 30.0
@@ -65,15 +71,17 @@ DamageLabel: class extends Actor {
 	pass addSprite(sprite)
     }
 
-    update: func (delta: Float) {
+    update: func (delta: Float) -> Bool {
 	counter += 1
 
 	sprite alpha = (maxCounter - counter) / (1.0 * maxCounter)
 	sprite pos add!(0, -1)
 
 	if (counter >= maxCounter) {
-	    destroy()
+	    _destroy()
 	}
+
+	!alive
     }
 
     destroy: func {
@@ -82,7 +90,7 @@ DamageLabel: class extends Actor {
 
     _destroy: func {
 	destroy()
-	engine remove(this)
+	alive = false
     }
 
 }
@@ -108,6 +116,8 @@ Bullet: class extends Actor {
 
     type: BulletType
 
+    alive := true
+
     init: func (=engine, =level, =pos, =dir) {
 	engine add(this)
 	ui = engine ui
@@ -124,7 +134,7 @@ Bullet: class extends Actor {
 	level play("plop")
     }
 
-    update: func (delta: Float) {
+    update: func (delta: Float) -> Bool {
 	pos add!(dir mul(speed))
 	box pos set!(pos add(sprite offset))
 
@@ -173,6 +183,8 @@ Bullet: class extends Actor {
 		break
 	    }
 	}
+
+	!alive
     }
 
     destroy: func {
@@ -181,7 +193,7 @@ Bullet: class extends Actor {
 
     _destroy: func {
 	destroy()
-	engine remove(this)
+	alive = false
     }
 
 }
