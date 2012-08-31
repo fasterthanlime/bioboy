@@ -1,0 +1,22 @@
+# Installation on Mac OS X
+
+## X11/XQuartz
+You only need to install XQuartz manually if you're on Mac OS X 10.8 Mountain Lion. Previous versions of Mac OS X already include it
+
+Follow the instructions at http://xquartz.macosforge.org
+
+## Homebrew
+If you don't have it already, open a Terminal window and type:
+
+    ruby <(curl -fsSkL raw.github.com/mxcl/homebrew/go)
+
+## Bioboy
+We put together a little shell script which will take care of installing the required librairies, compiling Bioboy from the source and bundling it into a nice .app.
+
+Open a Terminal window and type:
+
+    cd ~/Desktop
+    curl -fsSkL https://github.com/downloads/romac/bioboy/install-osx.sh | bash
+
+Now if everyting went fine there should be a Bioboy.app application on your Desktop.
+If you ran into problems at any of these steps, let us know by creating an issue at https://github.com/nddrylliog/bioboy/issues.
